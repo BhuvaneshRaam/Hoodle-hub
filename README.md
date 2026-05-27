@@ -1,2 +1,0 @@
-# hoodle-hub
-Hoodle- UI
