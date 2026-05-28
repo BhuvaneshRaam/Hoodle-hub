@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+/* This is how you set your custom ProcureFlow enterprise colors in v4! */
+@theme {
+  --color-brand-50: #EEEDFE;
+  --color-brand-100: #CECBF6;
+  --color-brand-400: #7F77DD;
+  --color-brand-600: #534AB7;
+  --color-brand-800: #3C3489;
+  --color-brand-900: #26215C;
+}
