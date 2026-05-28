@@ -1,1 +1,110 @@
-<p>dashboard works!</p>
+<div class="space-y-6">
+
+    <div class="flex justify-between items-start">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+            <p class="text-sm text-gray-500 mt-1">Here is what's happening in your workspace today.</p>
+        </div>
+
+        <app-button variant="primary" (click)="isRequestDrawerOpen = true">
+            + Create Request
+        </app-button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-4">
+            <div class="p-3 bg-brand-50 text-brand-600 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-500">Total Spend (MTD)</p>
+                <p class="text-2xl font-bold text-gray-900">{{ totalSpend | currency:'INR' }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-4">
+            <div class="p-3 bg-amber-50 text-amber-600 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-500">Pending Approvals</p>
+                <p class="text-2xl font-bold text-gray-900">{{ pendingRequests }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-4">
+            <div class="p-3 bg-green-50 text-green-600 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                    </path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-500">Active Vendors</p>
+                <p class="text-2xl font-bold text-gray-900">{{ activeVendors }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-gray-900">Recent Purchase Requests</h2>
+            <button class="text-sm font-medium text-brand-600 hover:text-brand-800 transition-colors">View All</button>
+        </div>
+
+        <div class="p-6">
+
+            <app-data-table [columns]="tableColumns" [data]="recentRequests" [selectable]="true">
+            </app-data-table>
+
+        </div>
+    </div>
+    <!-- <app-button variant="primary" class="mr-2">+ Create Request</app-button>
+    <app-button variant="outline" class="mr-2">Cancel</app-button>
+    <app-button variant="danger" class="mr-2">Delete Vendor</app-button>
+    -->
+
+    <app-side-drawer [isOpen]="isRequestDrawerOpen" title="Create New Request" (closed)="isRequestDrawerOpen = false">
+    
+        <form class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                <select
+                    class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-brand-600 outline-none transition-all">
+                    <option>Engineering</option>
+                    <option>Marketing</option>
+                    <option>Operations</option>
+                </select>
+            </div>
+    
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Amount (INR)</label>
+                <input type="number" placeholder="Enter amount"
+                    class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-brand-600 outline-none transition-all">
+            </div>
+    
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Justification</label>
+                <textarea rows="4" placeholder="Why do you need this?"
+                    class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-brand-600 outline-none transition-all"></textarea>
+            </div>
+        </form>
+    
+        <div drawer-footer class="flex w-full justify-end gap-3">
+            <app-button variant="outline" (click)="isRequestDrawerOpen = false">Cancel</app-button>
+    
+            <app-button variant="primary" (click)="isRequestDrawerOpen = false">Submit Request</app-button>
+        </div>
+    
+    </app-side-drawer>
+</div>

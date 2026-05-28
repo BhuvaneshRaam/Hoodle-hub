@@ -1,0 +1,79 @@
+<div class="overflow-hidden border border-gray-200 rounded-xl bg-white shadow-sm">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-sm text-gray-700">
+      
+      <thead class="bg-brand-50/40 text-brand-900 border-b border-gray-200 text-xs uppercase font-bold tracking-wider">
+        <tr>
+          @if (selectable) {
+            <th class="px-6 py-4 w-12 whitespace-nowrap">
+              <input type="checkbox" class="w-4 h-4 accent-brand-600 cursor-pointer rounded">
+            </th>
+          }
+
+          @for (col of columns; track col.key) {
+            <th class="px-6 py-4 whitespace-nowrap">
+              {{ col.header }}
+            </th>
+          }
+        </tr>
+      </thead>
+      
+      <tbody class="divide-y divide-gray-100 bg-white">
+        
+        @for (row of data; track $index) {
+          <tr class="hover:bg-brand-50 transition-colors duration-150 group">
+            
+            @if (selectable) {
+              <td class="px-6 py-4 w-12 whitespace-nowrap">
+                <input type="checkbox" class="w-4 h-4 accent-brand-600 cursor-pointer rounded">
+              </td>
+            }
+
+            @for (col of columns; track col.key) {
+              <td class="px-6 py-4 whitespace-nowrap">
+                
+                @switch (col.type) {
+                  @case ('text') {
+                    <span class="font-medium text-gray-900">{{ row[col.key] }}</span>
+                  }
+                  @case ('currency') {
+                    <span class="text-gray-700 font-medium">{{ row[col.key] | currency:'INR' }}</span>
+                  }
+                  @case ('badge') {
+                    <span class="px-3 py-1 rounded-full text-xs font-bold border"
+                          [ngClass]="{
+                            'bg-green-50 text-green-700 border-green-200': row[col.key] === 'Approved' || row[col.key] === 'Delivered',
+                            'bg-amber-50 text-amber-700 border-amber-200': row[col.key] === 'Pending' || row[col.key] === 'In Transit',
+                            'bg-red-50 text-red-700 border-red-200': row[col.key] === 'Rejected'
+                          }">
+                      {{ row[col.key] }}
+                    </span>
+                  }
+                  @case ('action') {
+                    <div class="flex gap-3">
+                      <button class="text-brand-600 hover:text-brand-800 font-semibold transition-colors text-sm">View</button>
+                    </div>
+                  }
+                }
+                
+              </td>
+            }
+          </tr>
+          
+        } @empty {
+          
+          <tr>
+            <td [colSpan]="selectable ? columns.length + 1 : columns.length" class="px-6 py-12 text-center">
+              <div class="flex flex-col items-center justify-center text-gray-500">
+                <svg class="w-10 h-10 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                <span class="font-medium text-gray-600">No records found</span>
+                <span class="text-sm mt-1">Try adjusting your filters or search.</span>
+              </div>
+            </td>
+          </tr>
+          
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
