@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +16,28 @@ export class LoginComponent {
   password: string = '';
   rememberMe: boolean = false;
 
+  isLoading = false;
+  errorMessage = '';
+
+  constructor(private authSvc: AuthService, private router: Router) {}
+  
   onSubmit() {
-    console.log('Authenticating:', { email: this.email, password: this.password });
-    // Later, you will call your AuthService here and navigate to /app/dashboard
+    if (!this.email || !this.password) return;
+    
+    this.isLoading = true;
+    const credentials = { emailId: this.email, password: this.password };
+
+    this.authSvc.login(credentials).subscribe({
+      next: (initData) => {
+        this.isLoading = false;
+        console.log('Login and Init successful! Welcome,', initData.userName);
+        this.router.navigate(['/app']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.message || 'Invalid email or password.';
+      }
+    });
   }
 
   onSocialLogin(provider: string) {
