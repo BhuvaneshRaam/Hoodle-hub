@@ -16,10 +16,16 @@ export class LoginComponent {
   password: string = '';
   rememberMe: boolean = false;
 
+  showPassword = false;
+
   isLoading = false;
   errorMessage = '';
 
   constructor(private authSvc: AuthService, private router: Router) {}
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
   
   onSubmit() {
     if (!this.email || !this.password) return;

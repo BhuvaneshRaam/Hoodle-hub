@@ -19,7 +19,14 @@ export class RegisterComponent {
   isLoading = false;
   errorMessage = '';
 
+  showPassword = false;
+
   constructor(private authSvc: AuthService, private router: Router) {}
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+  
   onSubmit(): void {
     // Basic validation
     if (!this.fullName || !this.companyName || !this.email || !this.password) {
