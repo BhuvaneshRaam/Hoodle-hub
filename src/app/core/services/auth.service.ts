@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 import { switchMap } from 'rxjs/operators';
 
 export interface InitData {
-  email: string;
+  emailId: string;
   userName: string;
   tenantName: string;
   roles: string[];
