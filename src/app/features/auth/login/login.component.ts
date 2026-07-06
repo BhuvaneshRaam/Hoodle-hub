@@ -35,9 +35,11 @@ export class LoginComponent {
 
     this.authSvc.login(credentials).subscribe({
       next: (initData) => {
-        this.isLoading = false;
         console.log('Login and Init successful! Welcome,', initData.userName);
-        this.router.navigate(['/app']);
+        setTimeout(() => {
+          this.isLoading = false;
+          this.router.navigate(['/app']); 
+        }, 400);
       },
       error: (err) => {
         this.isLoading = false;

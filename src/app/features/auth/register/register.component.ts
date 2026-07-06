@@ -46,10 +46,11 @@ export class RegisterComponent {
 
     this.authSvc.register(payload).subscribe({
       next: (response) => {
-        this.isLoading = false;
         console.log('Registration successful!', response);
-        // Successfully created! Send them to login.
-        this.router.navigate(['/signin']); 
+        setTimeout(() => {
+          this.isLoading = false;
+          this.router.navigate(['/signin']); 
+        }, 400);
       },
       error: (err) => {
         this.isLoading = false;
