@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+export interface TableAction {
+  label: string;
+  actionKey: string; // e.g., 'VIEW', 'EDIT', 'APPROVE', 'DELETE'
+  colorClass?: string; // Optional: To make Delete buttons red, etc.
+}
 
 export interface TableColumn {
   key: string;
   header: string;
-  type: 'text' | 'badge' | 'currency' | 'action';
+  type: 'text' | 'badge' | 'currency' | 'action' | 'date';
+  actions?: TableAction[]; // Only for 'action' type columns
 }
 
 @Component({
@@ -18,4 +25,10 @@ export class DataTableComponent {
   @Input() data: any[] = [];
 
   @Input() selectable: boolean = false;
+
+  @Output() actionClicked = new EventEmitter<{ action: string; row: any }>();
+
+  onActionClick(actionKey: string, row: any) {
+    this.actionClicked.emit({ action: actionKey, row });
+  }
 }

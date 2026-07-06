@@ -3,6 +3,7 @@ import { PublicLayoutComponent } from './layout/public-layout/public-layout.comp
 import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 import { noAuthGuard } from './core/guards/no-auth.guard';
 import { authGuard } from './core/guards/auth.guard';
+import { PurchaseRequestComponent } from './features/procurement/purchase-request/purchase-request.component';
 
 export const routes: Routes = [
     {
@@ -37,6 +38,10 @@ export const routes: Routes = [
             {
                 path: '',
                 loadComponent: () => import('./features/dashboard/dashboard.component').then(c => c.DashboardComponent)
+            },
+            {
+                path: 'prq',
+                loadComponent: () => import('./features/procurement/purchase-request/purchase-request.component').then(c => c.PurchaseRequestComponent)
             }
         ]
     },

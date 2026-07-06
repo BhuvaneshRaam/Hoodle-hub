@@ -42,16 +42,26 @@
                   @case ('badge') {
                     <span class="px-3 py-1 rounded-full text-xs font-bold border"
                           [ngClass]="{
-                            'bg-green-50 text-green-700 border-green-200': row[col.key] === 'Approved' || row[col.key] === 'Delivered',
-                            'bg-amber-50 text-amber-700 border-amber-200': row[col.key] === 'Pending' || row[col.key] === 'In Transit',
-                            'bg-red-50 text-red-700 border-red-200': row[col.key] === 'Rejected'
+                            'bg-green-50 text-green-700 border-green-200': row[col.key] === 'APPROVED',
+                            'bg-amber-50 text-amber-700 border-amber-200': row[col.key] === 'SUBMITTED',
+                            'bg-gray-100 text-gray-700 border-gray-300': row[col.key] === 'DRAFT',
+                            'bg-red-50 text-red-700 border-red-200': row[col.key] === 'REJECTED'
                           }">
-                      {{ row[col.key] }}
+                      {{ row[col.key] | titlecase }}
                     </span>
+                  }
+                  @case ('date') {
+                    <span class="text-gray-600">{{ row[col.key] | date:'mediumDate' }}</span>
                   }
                   @case ('action') {
                     <div class="flex gap-3">
-                      <button class="text-brand-600 hover:text-brand-800 font-semibold transition-colors text-sm">View</button>
+                      @for (act of col.actions; track act.actionKey) {
+                        <button (click)="onActionClick(act.actionKey, row)" 
+                                class="font-semibold transition-colors text-sm hover:underline"
+                                [ngClass]="act.colorClass || 'text-brand-600 hover:text-brand-800'">
+                          {{ act.label }}
+                        </button>
+                      }
                     </div>
                   }
                 }

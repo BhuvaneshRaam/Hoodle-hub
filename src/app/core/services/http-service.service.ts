@@ -12,7 +12,7 @@ export class HttpServiceService {
 
   private readonly http = inject(HttpClient);
   
-  private readonly baseUrl = environment.apiUrl; 
+  private readonly baseUrl = environment.authUrl; 
 
   /**
    * GET request
@@ -26,27 +26,32 @@ export class HttpServiceService {
         }
       });
     }
-    return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params: httpParams });
+    const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}/${endpoint}`;
+
+    return this.http.get<T>(url, { params: httpParams });
   }
 
   /**
    * POST request
    */
   public post<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body);
+    const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}/${endpoint}`;
+    return this.http.post<T>(url, body);
   }
 
   /**
    * PUT request
    */
   public put<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body);
+    const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}/${endpoint}`;
+    return this.http.put<T>(url, body);
   }
 
   /**
    * DELETE request
    */
   public delete<T>(endpoint: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`);
+    const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}/${endpoint}`;
+    return this.http.delete<T>(url);
   }
 }
