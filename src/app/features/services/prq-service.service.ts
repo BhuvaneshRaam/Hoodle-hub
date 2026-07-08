@@ -13,8 +13,8 @@ export class PrqServiceService {
   private PRQ = this.orbitUrl + '/prq';
 
   // GET all requests
-  getAllRequests() {
-    return this.httpService.get<any[]>(this.PRQ + '/all');
+  getAllRequests(page: number = 0, size: number = 10) {
+    return this.httpService.get<any>(this.PRQ + '/all', { page, size });
   }
 
   // POST new request

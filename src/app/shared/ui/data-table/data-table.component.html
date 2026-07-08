@@ -20,7 +20,7 @@
 
       <tbody class="divide-y divide-gray-100 bg-white">
 
-        @for (row of data; track $index) {
+        @for (row of data; track row) {
         <tr class="hover:bg-brand-50 transition-colors duration-150 group">
 
           @if (selectable) {

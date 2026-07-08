@@ -2,22 +2,40 @@ import { Component } from '@angular/core';
 import { DataTableComponent, TableColumn } from '../../../shared/ui/data-table/data-table.component';
 import { CommonModule } from '@angular/common';
 import { PrqServiceService } from '../../services/prq-service.service';
+import { FormsModule, NgForm } from '@angular/forms';
+import { SideDrawerComponent } from '../../../shared/ui/side-drawer/side-drawer.component';
 
 @Component({
   selector: 'app-purchase-request',
-  imports: [CommonModule, DataTableComponent],
+  imports: [CommonModule, DataTableComponent, FormsModule, SideDrawerComponent],
   templateUrl: './purchase-request.component.html',
   styleUrl: './purchase-request.component.css'
 })
 export class PurchaseRequestComponent {
 
-  constructor(private prqService: PrqServiceService) {}
+  constructor(private prqService: PrqServiceService) { }
 
-  prqData: any[] = []; 
-  
+  prqData: any[] = [];
+  isDrawerOpen: boolean = false;
+  isSubmitting: boolean = false;
+  isSuccess: boolean = false;
+
+  currentPage: number = 0;
+  totalPages: number = 1;
+  totalElements: number = 0;
+  pageSize: number = 10;
+
   ngOnInit() {
     this.loadData();
   }
+
+  newRequest = {
+    department: '',
+    remarks: '',
+    items: [
+      { itemName: '', description: '', quantity: 1, unitPrice: null as any }
+    ]
+  };
 
   prqColumns: TableColumn[] = [
     { key: 'prNumber', header: 'Request ID', type: 'text' },
@@ -25,9 +43,9 @@ export class PurchaseRequestComponent {
     { key: 'totalAmount', header: 'Est. Amount', type: 'currency' },
     { key: 'createdAt', header: 'Created On', type: 'date' },
     { key: 'status', header: 'Status', type: 'badge' },
-    { 
-      key: 'actions', 
-      header: 'Actions', 
+    {
+      key: 'actions',
+      header: 'Actions',
       type: 'action',
       actions: [
         { label: 'View', actionKey: 'VIEW' },
@@ -36,12 +54,7 @@ export class PurchaseRequestComponent {
     }
   ];
 
-  // prqData = [
-  //   { reqId: 'PRQ-2024-001', department: 'Engineering', item: 'MacBook Pro M3 Max', amount: 320000, status: 'Pending' },
-  //   { reqId: 'PRQ-2024-002', department: 'Marketing', item: 'Figma Enterprise License', amount: 85000, status: 'Approved' },
-  //   { reqId: 'PRQ-2024-003', department: 'Operations', item: 'Office Chairs (x10)', amount: 150000, status: 'Delivered' },
-  //   { reqId: 'PRQ-2024-004', department: 'Sales', item: 'Client Dinner Expense', amount: 45000, status: 'Rejected' },
-  // ];
+
 
   // 3. Handle the Action Clicks
   handleTableAction(event: { action: string; row: any }) {
@@ -54,14 +67,79 @@ export class PurchaseRequestComponent {
 
 
   loadData() {
-    this.prqService.getAllRequests().subscribe({
-      next: (response: any) => {this.prqData = response.content, console.log('Fetched data:', response);},
+    this.prqService.getAllRequests(this.currentPage, this.pageSize).subscribe({
+      next: (response: any) => {
+        this.prqData = response.content;
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
+        console.log('Fetched data:', response);
+      },
       error: (err) => console.error('Failed to fetch data', err)
     });
   }
 
-  handlePageChange(event: any) {
-    console.log('Page changed to:', event);
+  handlePageChange(event: number) {
+    this.currentPage = event;
+    this.loadData();
   }
 
+
+  openDrawer() {
+    this.isDrawerOpen = true;
+  }
+
+  closeDrawer(form?: NgForm) {
+    this.isDrawerOpen = false;
+    this.resetForm(form);
+  }
+
+  addItem() {
+    this.newRequest.items.push({ itemName: '', description: '', quantity: 1, unitPrice: null });
+  }
+
+  removeItem(index: number) {
+    if (this.newRequest.items.length > 1) {
+      this.newRequest.items.splice(index, 1);
+    }
+  }
+
+  get requestTotal(): number {
+    return this.newRequest.items.reduce((total, item) => {
+      return total + ((item.quantity || 0) * (item.unitPrice || 0));
+    }, 0);
+  }
+
+  submitRequest(form: NgForm) {
+    if (form.invalid) return;
+    this.isSubmitting = true;
+
+    this.prqService.createRequest(this.newRequest).subscribe({
+      next: () => {
+        console.log('Successfully created!');
+        this.isSubmitting = false;
+        this.isSuccess = true;
+
+        setTimeout(() => {
+          this.closeDrawer(form);
+          this.loadData();
+          this.isSuccess = false; // Reset for next time
+        }, 600);
+      },
+      error: (err) => {
+        console.error('Submission failed', err);
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  resetForm(form?: NgForm) {
+    if (form) {
+      form.resetForm();
+    }
+    this.newRequest = {
+      department: '',
+      remarks: '',
+      items: [{ itemName: '', description: '', quantity: 1, unitPrice: null as any }]
+    };
+  }
 }
