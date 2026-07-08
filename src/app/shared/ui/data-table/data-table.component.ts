@@ -26,9 +26,28 @@ export class DataTableComponent {
 
   @Input() selectable: boolean = false;
 
+  @Input() showPagination: boolean = false;
+  @Input() currentPage: number = 0;
+  @Input() totalPages: number = 1;
+  @Input() totalElements: number = 0;
+  @Input() pageSize: number = 10;
+
   @Output() actionClicked = new EventEmitter<{ action: string; row: any }>();
+  @Output() pageChanged = new EventEmitter<number>();
 
   onActionClick(actionKey: string, row: any) {
     this.actionClicked.emit({ action: actionKey, row });
+  }
+
+  onPrevPage() {
+    if (this.currentPage > 0) {
+      this.pageChanged.emit(this.currentPage - 1);
+    }
+  }
+
+  onNextPage() {
+    if (this.currentPage < this.totalPages - 1) {
+      this.pageChanged.emit(this.currentPage + 1);
+    }
   }
 }

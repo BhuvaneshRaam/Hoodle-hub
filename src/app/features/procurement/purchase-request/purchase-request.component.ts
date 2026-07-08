@@ -60,4 +60,8 @@ export class PurchaseRequestComponent {
     });
   }
 
+  handlePageChange(event: any) {
+    console.log('Page changed to:', event);
+  }
+
 }
