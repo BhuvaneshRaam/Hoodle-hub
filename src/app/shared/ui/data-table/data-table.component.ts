@@ -5,6 +5,7 @@ export interface TableAction {
   label: string;
   actionKey: string; // e.g., 'VIEW', 'EDIT', 'APPROVE', 'DELETE'
   colorClass?: string; // Optional: To make Delete buttons red, etc.
+  showIf?: (row: any) => boolean;
 }
 
 export interface TableColumn {
