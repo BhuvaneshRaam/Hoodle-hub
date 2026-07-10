@@ -25,6 +25,11 @@ export class PurchaseRequestComponent {
   totalElements: number = 0;
   pageSize: number = 10;
 
+  isEditMode: boolean = false;
+  editingId: string | null = null;
+
+  isViewMode: boolean = false; 
+
   ngOnInit() {
     this.loadData();
   }
@@ -48,8 +53,29 @@ export class PurchaseRequestComponent {
       header: 'Actions',
       type: 'action',
       actions: [
-        { label: 'View', actionKey: 'VIEW' },
-        { label: 'Approve', actionKey: 'APPROVE', colorClass: 'text-green-600 hover:text-green-800' }
+        { 
+          label: 'View', 
+          actionKey: 'VIEW',
+          colorClass: 'text-gray-700 bg-white border-gray-200 hover:bg-gray-50 shadow-sm' 
+        },
+        { 
+          label: 'Edit', 
+          actionKey: 'EDIT', 
+          colorClass: 'text-gray-700 bg-white border-gray-200 hover:bg-gray-50 shadow-sm',
+          showIf: (row) => row.status === 'DRAFT' 
+        },
+        { 
+          label: 'Submit', 
+          actionKey: 'SUBMIT', 
+          colorClass: 'text-brand-700 bg-brand-50 border-brand-200 hover:bg-brand-100', 
+          showIf: (row) => row.status === 'DRAFT' 
+        },
+        { 
+          label: 'Approve', 
+          actionKey: 'APPROVE', 
+          colorClass: 'text-green-700 bg-green-50 border-green-200 hover:bg-green-100',
+          showIf: (row) => row.status === 'SUBMITTED' 
+        }
       ]
     }
   ];
@@ -58,13 +84,56 @@ export class PurchaseRequestComponent {
 
   // 3. Handle the Action Clicks
   handleTableAction(event: { action: string; row: any }) {
+    const rowUuid = event.row.id;
+
     if (event.action === 'VIEW') {
-      console.log('Opening details for:', event.row.reqId);
-    } else if (event.action === 'APPROVE') {
-      console.log('Approving request:', event.row.reqId);
+      this.isViewMode = true;
+      
+      this.prqService.getRequestById(rowUuid).subscribe({
+        next: (fullPrq: any) => {
+          this.newRequest = {
+            department: fullPrq.department,
+            remarks: fullPrq.remarks || '',
+            items: fullPrq.items ? fullPrq.items : []
+          };
+          this.openDrawer();
+        },
+        error: (err: any) => console.error('Failed to fetch PRQ details', err)
+      });
+    } 
+    
+    else if (event.action === 'EDIT') {
+      this.isEditMode = true;
+      this.editingId = rowUuid; 
+      
+      // CALL THE BACKEND TO GET FULL DETAILS (Assuming you have getRequestById in your service)
+      this.prqService.getRequestById(rowUuid).subscribe({
+        next: (fullPrq: any) => {
+          this.newRequest = {
+            department: fullPrq.department,
+            remarks: fullPrq.remarks || '',
+            items: fullPrq.items ? JSON.parse(JSON.stringify(fullPrq.items)) : []
+          };
+          this.openDrawer();
+        },
+        error: (err: any) => {
+          console.error('Failed to fetch PRQ details', err);
+          // Optional: Show a toast error message here
+        }
+      });
+    }
+    
+    // NEW: Handle the SUBMIT click
+    else if (event.action === 'SUBMIT') {
+      this.prqService.submitRequest(rowUuid).subscribe({
+        next: () => {
+          console.log('Draft Submitted Successfully!');
+          this.loadData(); // Reload to update the status badge
+        },
+        error: (err: any) => console.error('Failed to submit draft', err)
+      });
     }
   }
-
 
   loadData() {
     this.prqService.getAllRequests(this.currentPage, this.pageSize).subscribe({
@@ -90,6 +159,9 @@ export class PurchaseRequestComponent {
 
   closeDrawer(form?: NgForm) {
     this.isDrawerOpen = false;
+    this.isEditMode = false;
+    this.editingId = null;
+    this.isSuccess = false;
     this.resetForm(form);
   }
 
@@ -112,20 +184,23 @@ export class PurchaseRequestComponent {
   submitRequest(form: NgForm) {
     if (form.invalid) return;
     this.isSubmitting = true;
+    
+    // Check if we are Creating or Editing!
+    const apiCall = this.isEditMode && this.editingId 
+      ? this.prqService.updateRequest(this.editingId, this.newRequest)
+      : this.prqService.createRequest(this.newRequest);
 
-    this.prqService.createRequest(this.newRequest).subscribe({
+    apiCall.subscribe({
       next: () => {
-        console.log('Successfully created!');
         this.isSubmitting = false;
         this.isSuccess = true;
 
         setTimeout(() => {
           this.closeDrawer(form);
-          this.loadData();
-          this.isSuccess = false; // Reset for next time
+          this.loadData(); 
         }, 600);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Submission failed', err);
         this.isSubmitting = false;
       }

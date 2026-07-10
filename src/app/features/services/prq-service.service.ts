@@ -17,13 +17,27 @@ export class PrqServiceService {
     return this.httpService.get<any>(this.PRQ + '/all', { page, size });
   }
 
+  getRequestById(uuid: string) {
+    return this.httpService.get<any>(`${this.PRQ}/${uuid}`);
+  }
+
   // POST new request
   createRequest(data: any) {
     return this.httpService.post(this.PRQ + '/create', data);
   }
 
-  // PUT (Approve) request
-  approveRequest(id: string) {
-    return this.httpService.put(`${this.PRQ}/${id}/approve`, {});
+  // POST (Approve) request
+  approveRequest(uuid: string) {
+    return this.httpService.post(`${this.PRQ}/${uuid}/approve`, {});
+  }
+
+  // PUT (update) request
+  updateRequest(uuid: string, data: any) {
+    return this.httpService.put(`${this.PRQ}/edit/${uuid}`, data);
+  }
+
+  // POST (Submit) request
+  submitRequest(uuid: string) {
+    return this.httpService.post(`${this.PRQ}/${uuid}/submit`, {});
   }
 }
