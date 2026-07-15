@@ -34,14 +34,18 @@ export const routes: Routes = [
         component: AppLayoutComponent,
         canActivate: [authGuard],
         children: [
-            { path: '', redirectTo: '', pathMatch: 'full' },
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             {
-                path: '',
+                path: 'dashboard',
                 loadComponent: () => import('./features/dashboard/dashboard.component').then(c => c.DashboardComponent)
             },
             {
                 path: 'prq',
                 loadComponent: () => import('./features/procurement/purchase-request/purchase-request.component').then(c => c.PurchaseRequestComponent)
+            },
+            {
+                path: 'po',
+                loadComponent: () => import('./features/procurement/purchase-order/purchase-order.component').then(c => c.PurchaseOrderComponent)
             }
         ]
     },
