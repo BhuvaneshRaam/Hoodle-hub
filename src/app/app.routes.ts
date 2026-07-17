@@ -44,7 +44,7 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/procurement/purchase-request/purchase-request.component').then(c => c.PurchaseRequestComponent)
             },
             {
-                path: 'po',
+                path: 'purchase-orders',
                 loadComponent: () => import('./features/procurement/purchase-order/purchase-order.component').then(c => c.PurchaseOrderComponent)
             }
         ]

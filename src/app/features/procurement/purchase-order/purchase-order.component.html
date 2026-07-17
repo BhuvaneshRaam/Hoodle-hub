@@ -1,1 +1,138 @@
-<p>purchase-order works!</p>
+<div class="space-y-6">
+
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Purchase Orders</h1>
+      <p class="text-sm text-gray-500 mt-1">Manage and track all vendor purchase orders.</p>
+    </div>
+  </div>
+
+  <app-data-table [columns]="poColumns" [data]="poData" [showPagination]="true"
+    [currentPage]="currentPage" [totalPages]="totalPages" [totalElements]="totalElements" [pageSize]="pageSize"
+    (actionClicked)="handleTableAction($event)" (pageChanged)="handlePageChange($event)">
+  </app-data-table>
+
+  <app-side-drawer [isOpen]="isDrawerOpen" [title]="isEditMode ? 'Edit Purchase Order' : 'View Purchase Order'" (closed)="closeDrawer()">
+
+    <form #poForm="ngForm" class="space-y-6">
+
+      <!-- Read-only PO Meta -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">PO Number</label>
+          <input type="text" [value]="selectedPo.poNumber" disabled
+            class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg text-sm text-gray-500 cursor-not-allowed">
+        </div>
+
+        <!-- Vendor Name -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Vendor Name <span class="text-red-500" *ngIf="isEditMode">*</span>
+          </label>
+          <input type="text" name="vendorName" [(ngModel)]="selectedPo.vendorName"
+            required #vendorNameCtrl="ngModel" [disabled]="isViewMode"
+            placeholder="e.g. Acme Corp"
+            [class.border-red-500]="vendorNameCtrl.invalid && vendorNameCtrl.touched"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-600 transition-colors disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200">
+          <p class="text-xs text-red-500 mt-1" *ngIf="vendorNameCtrl.invalid && vendorNameCtrl.touched">
+            Vendor Name is required.
+          </p>
+        </div>
+
+        <!-- Vendor Email -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Vendor Email <span class="text-red-500" *ngIf="isEditMode">*</span>
+          </label>
+          <input type="email" name="vendorEmail" [(ngModel)]="selectedPo.vendorEmail"
+            required email #vendorEmailCtrl="ngModel" [disabled]="isViewMode"
+            placeholder="e.g. vendor@acme.com"
+            [class.border-red-500]="vendorEmailCtrl.invalid && vendorEmailCtrl.touched"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-600 transition-colors disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200">
+          <p class="text-xs text-red-500 mt-1" *ngIf="vendorEmailCtrl.invalid && vendorEmailCtrl.touched">
+            <span *ngIf="vendorEmailCtrl.errors?.['required']">Vendor Email is required.</span>
+            <span *ngIf="vendorEmailCtrl.errors?.['email']">Please enter a valid email.</span>
+          </p>
+        </div>
+
+        <!-- Negotiated Price -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Negotiated Price (INR) <span class="text-red-500" *ngIf="isEditMode">*</span>
+          </label>
+          <input type="number" min="0.01" name="negotiatedPrice"
+            [(ngModel)]="selectedPo.negotiatedPrice"
+            required #negPriceCtrl="ngModel"
+            [disabled]="isViewMode"
+            placeholder="e.g. 50000"
+            [class.border-red-500]="negPriceCtrl.invalid && negPriceCtrl.touched"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-600 transition-colors disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200">
+          <p class="text-xs text-red-500 mt-1" *ngIf="negPriceCtrl.invalid && negPriceCtrl.touched">
+            A valid negotiated price is required.
+          </p>
+        </div>
+      </div>
+
+      <hr class="border-gray-200">
+
+      <!-- Read-only Line Items -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold text-gray-900">PO Items</h3>
+          <span class="text-xs font-medium text-gray-500">
+            Est. Total: {{ selectedPo.totalAmount | currency:'INR' }}
+          </span>
+        </div>
+
+        <div class="space-y-3">
+          @for (item of selectedPo.items; track $index) {
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <div class="grid grid-cols-1 gap-2">
+                <div class="flex items-start justify-between">
+                  <p class="text-sm font-semibold text-gray-800">{{ item.itemName }}</p>
+                  <span class="text-xs text-gray-500 ml-2">Qty: {{ item.quantity }}</span>
+                </div>
+                <p class="text-xs text-gray-500" *ngIf="item.description">{{ item.description }}</p>
+                <div class="flex gap-4 mt-1">
+                  <div>
+                    <label class="block text-xs font-medium text-gray-400">Unit Price</label>
+                    <p class="text-sm text-gray-700 font-medium">{{ item.unitPrice | currency:'INR' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </form>
+
+    <div drawer-footer class="w-full flex justify-end gap-3">
+      <button type="button" (click)="closeDrawer()"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+        {{ isEditMode ? 'Cancel' : 'Close' }}
+      </button>
+
+      <button type="button" (click)="saveOrder(poForm)" [disabled]="isSaving || poForm.invalid"
+        *ngIf="isEditMode"
+        class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-all duration-300 flex items-center min-w-[140px] justify-center bg-brand-600 hover:bg-brand-800 disabled:opacity-50 disabled:cursor-not-allowed">
+        @if (isSaving) {
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+        }
+        {{ isSaving ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </div>
+
+  </app-side-drawer>
+
+  @if (showToast) {
+    <div class="fixed bottom-4 right-4 z-50 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0"></path>
+      </svg>
+      <span class="text-sm font-medium">{{ toastMessage }}</span>
+    </div>
+  }
+</div>
