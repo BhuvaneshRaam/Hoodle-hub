@@ -40,11 +40,11 @@ export class AuthService {
   public login(credentials: any): Observable<any> {
     // Assuming your backend returns an object like { token: 'ey...' }
     return this.http.post<any>(this.AUTH_ROOT_PATH + '/sign-in', credentials).pipe(
-      tap(response => {
-        if (response && response.token) {
-          localStorage.setItem(this.TOKEN_KEY, response.token);
-        }
-      }),
+      // tap(response => {
+      //   if (response && response.token) {
+      //     localStorage.setItem(this.TOKEN_KEY, response.token);
+      //   }
+      // }),
       switchMap(() => this.fetchInitData())
     );
   }
@@ -65,15 +65,24 @@ export class AuthService {
    * Clears the token and kicks the user to the login page
    */
   public logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    this.router.navigate(['/login']);
+    this.http.post<any>(this.AUTH_ROOT_PATH + '/logout', {}).subscribe({
+      next: () => {
+        this.currentUser.set(null);
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Logout request failed, forcing local logout', err);
+        this.currentUser.set(null);
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   /**
    * Helper to check if user is logged in
    */
   public isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.TOKEN_KEY);
+    return !!this.currentUser();
   }
 
 
@@ -97,15 +106,18 @@ export class AuthService {
 
   
   public initializeApp(): Observable<any> {
-    if (this.getToken()) {
-      return this.fetchInitData().pipe(
-        catchError((error) => {
-          console.error('Failed to fetch init data on reload', error);
-          this.logout(); 
-          return of(null);
-        })
-      );
-    }
-    return of(null); // No token, just boot the app normally
+    return this.fetchInitData().pipe(
+      catchError((error) => {
+        this.currentUser.set(null);
+
+        // Prevent redirect loops if they are already on a public page
+        const currentUrl = this.router.url;
+        if (!currentUrl.includes('/login') && !currentUrl.includes('/signup')) {
+          this.router.navigate(['/login']);
+        }
+
+        return of(null);
+      })
+    );
   }
 }
