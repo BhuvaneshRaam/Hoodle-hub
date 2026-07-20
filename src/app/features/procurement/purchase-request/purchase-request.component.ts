@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { PrqServiceService } from '../../services/prq-service.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SideDrawerComponent } from '../../../shared/ui/side-drawer/side-drawer.component';
+import { Router } from '@angular/router';
+import { PoServiceService } from '../../services/po-service.service';
 
 @Component({
   selector: 'app-purchase-request',
@@ -13,12 +15,27 @@ import { SideDrawerComponent } from '../../../shared/ui/side-drawer/side-drawer.
 })
 export class PurchaseRequestComponent {
 
-  constructor(private prqService: PrqServiceService) { }
+  constructor(
+    private prqService: PrqServiceService,
+    private poService: PoServiceService,
+    private router: Router
+  ) { }
 
   prqData: any[] = [];
   isDrawerOpen: boolean = false;
   isSubmitting: boolean = false;
   isSuccess: boolean = false;
+
+  showToast: boolean = false;
+  toastMessage: string = '';
+
+  showSuccessToast(message: string) {
+    this.toastMessage = message;
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
 
   currentPage: number = 0;
   totalPages: number = 1;
@@ -75,6 +92,12 @@ export class PurchaseRequestComponent {
           actionKey: 'APPROVE', 
           colorClass: 'text-green-700 bg-green-50 border-green-200 hover:bg-green-100',
           showIf: (row) => row.status === 'SUBMITTED' 
+        },
+        { 
+          label: 'Create PO', 
+          actionKey: 'CREATE_PO', 
+          colorClass: 'text-brand-700 bg-brand-50 border-brand-200 hover:bg-brand-100',
+          showIf: (row) => row.status === 'APPROVED' 
         }
       ]
     }
@@ -127,10 +150,34 @@ export class PurchaseRequestComponent {
     else if (event.action === 'SUBMIT') {
       this.prqService.submitRequest(rowUuid).subscribe({
         next: () => {
-          console.log('Draft Submitted Successfully!');
+          this.showSuccessToast('Draft Submitted Successfully!');
           this.loadData(); // Reload to update the status badge
         },
         error: (err: any) => console.error('Failed to submit draft', err)
+      });
+    }
+    
+    // Handle the APPROVE click
+    else if (event.action === 'APPROVE') {
+      this.prqService.approveRequest(rowUuid).subscribe({
+        next: () => {
+          this.showSuccessToast('Request Approved Successfully!');
+          this.loadData(); // Reload to update status badge
+        },
+        error: (err: any) => console.error('Failed to approve request', err)
+      });
+    }
+
+    // Handle the CREATE_PO click
+    else if (event.action === 'CREATE_PO') {
+      this.poService.generateOrder(rowUuid).subscribe({
+        next: (res: any) => {
+          this.showSuccessToast('Purchase Order generated successfully! Redirecting...');
+          setTimeout(() => {
+            this.router.navigate(['/app/purchase-orders']);
+          }, 1200);
+        },
+        error: (err: any) => console.error('Failed to generate PO', err)
       });
     }
   }

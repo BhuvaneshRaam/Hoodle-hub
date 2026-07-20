@@ -24,11 +24,16 @@ export class PoServiceService {
 
   // PUT (update) order
   updateOrder(uuid: string, data: any) {
-    return this.httpService.put(`${this.PO}/edit/${uuid}`, data);
+    return this.httpService.put(`${this.PO}/${uuid}`, data);
   }
 
-  // POST (generate) request
-  submitRequest(uuid: string) {
-    return this.httpService.post(`${this.PO}/submit/${uuid}`, {});
+  // POST (generate) order
+  generateOrder(uuid: string) {
+    return this.httpService.post(`${this.PO}/generate/${uuid}`, {});
+  }
+
+  // POST (issue) order
+  issueOrder(uuid: string) {
+    return this.httpService.post(`${this.PO}/${uuid}/issue`, {});
   }
 }
