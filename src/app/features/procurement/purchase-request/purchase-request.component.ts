@@ -28,13 +28,20 @@ export class PurchaseRequestComponent {
 
   showToast: boolean = false;
   toastMessage: string = '';
+  toastType: 'success' | 'error' = 'success';
 
   showSuccessToast(message: string) {
+    this.toastType = 'success';
     this.toastMessage = message;
     this.showToast = true;
-    setTimeout(() => {
-      this.showToast = false;
-    }, 3000);
+    setTimeout(() => { this.showToast = false; }, 3000);
+  }
+
+  showErrorToast(message: string) {
+    this.toastType = 'error';
+    this.toastMessage = message;
+    this.showToast = true;
+    setTimeout(() => { this.showToast = false; }, 3500);
   }
 
   currentPage: number = 0;
@@ -111,7 +118,7 @@ export class PurchaseRequestComponent {
 
     if (event.action === 'VIEW') {
       this.isViewMode = true;
-      
+
       this.prqService.getRequestById(rowUuid).subscribe({
         next: (fullPrq: any) => {
           this.newRequest = {
@@ -121,15 +128,17 @@ export class PurchaseRequestComponent {
           };
           this.openDrawer();
         },
-        error: (err: any) => console.error('Failed to fetch PRQ details', err)
+        error: (err: any) => {
+          console.error('Failed to fetch PRQ details', err);
+          this.showErrorToast('Failed to load request details. Please try again.');
+        }
       });
     } 
     
     else if (event.action === 'EDIT') {
       this.isEditMode = true;
-      this.editingId = rowUuid; 
-      
-      // CALL THE BACKEND TO GET FULL DETAILS (Assuming you have getRequestById in your service)
+      this.editingId = rowUuid;
+
       this.prqService.getRequestById(rowUuid).subscribe({
         next: (fullPrq: any) => {
           this.newRequest = {
@@ -141,19 +150,24 @@ export class PurchaseRequestComponent {
         },
         error: (err: any) => {
           console.error('Failed to fetch PRQ details', err);
-          // Optional: Show a toast error message here
+          this.showErrorToast('Failed to load request for editing. Please try again.');
+          this.isEditMode = false;
+          this.editingId = null;
         }
       });
     }
     
-    // NEW: Handle the SUBMIT click
+    // Handle the SUBMIT click
     else if (event.action === 'SUBMIT') {
       this.prqService.submitRequest(rowUuid).subscribe({
         next: () => {
-          this.showSuccessToast('Draft Submitted Successfully!');
-          this.loadData(); // Reload to update the status badge
+          this.showSuccessToast('Draft submitted successfully!');
+          this.loadData();
         },
-        error: (err: any) => console.error('Failed to submit draft', err)
+        error: (err: any) => {
+          console.error('Failed to submit draft', err);
+          this.showErrorToast('Failed to submit request. Please try again.');
+        }
       });
     }
     
@@ -161,23 +175,29 @@ export class PurchaseRequestComponent {
     else if (event.action === 'APPROVE') {
       this.prqService.approveRequest(rowUuid).subscribe({
         next: () => {
-          this.showSuccessToast('Request Approved Successfully!');
-          this.loadData(); // Reload to update status badge
+          this.showSuccessToast('Request approved successfully!');
+          this.loadData();
         },
-        error: (err: any) => console.error('Failed to approve request', err)
+        error: (err: any) => {
+          console.error('Failed to approve request', err);
+          this.showErrorToast('Failed to approve request. Please try again.');
+        }
       });
     }
 
     // Handle the CREATE_PO click
     else if (event.action === 'CREATE_PO') {
       this.poService.generateOrder(rowUuid).subscribe({
-        next: (res: any) => {
-          this.showSuccessToast('Purchase Order generated successfully! Redirecting...');
+        next: () => {
+          this.showSuccessToast('Purchase Order generated! Redirecting...');
           setTimeout(() => {
             this.router.navigate(['/app/purchase-orders']);
           }, 1200);
         },
-        error: (err: any) => console.error('Failed to generate PO', err)
+        error: (err: any) => {
+          console.error('Failed to generate PO', err);
+          this.showErrorToast('Failed to generate Purchase Order. Please try again.');
+        }
       });
     }
   }
@@ -241,15 +261,18 @@ export class PurchaseRequestComponent {
       next: () => {
         this.isSubmitting = false;
         this.isSuccess = true;
-
+        const msg = this.isEditMode ? 'Request updated successfully!' : 'Request created successfully!';
+        this.showSuccessToast(msg);
         setTimeout(() => {
           this.closeDrawer(form);
-          this.loadData(); 
+          this.loadData();
         }, 600);
       },
       error: (err: any) => {
         console.error('Submission failed', err);
         this.isSubmitting = false;
+        const msg = this.isEditMode ? 'Failed to update request. Please try again.' : 'Failed to create request. Please try again.';
+        this.showErrorToast(msg);
       }
     });
   }

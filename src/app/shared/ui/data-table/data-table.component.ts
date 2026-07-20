@@ -51,4 +51,18 @@ export class DataTableComponent {
       this.pageChanged.emit(this.currentPage + 1);
     }
   }
+
+  formatBadgeText(val: string): string {
+    if (!val) return '';
+
+    return val
+      .split('_')
+      .map(word => {
+        if (word.length <= 2) {
+          return word.toUpperCase();
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(' ');
+  }
 }

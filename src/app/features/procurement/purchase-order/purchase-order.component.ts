@@ -26,6 +26,7 @@ export class PurchaseOrderComponent implements OnInit {
 
   showToast: boolean = false;
   toastMessage: string = '';
+  toastType: 'success' | 'error' = 'success';
 
   selectedPo: any = {
     id: '',
@@ -96,11 +97,17 @@ export class PurchaseOrderComponent implements OnInit {
   }
 
   showSuccessToast(message: string): void {
+    this.toastType = 'success';
     this.toastMessage = message;
     this.showToast = true;
-    setTimeout(() => {
-      this.showToast = false;
-    }, 3000);
+    setTimeout(() => { this.showToast = false; }, 3000);
+  }
+
+  showErrorToast(message: string): void {
+    this.toastType = 'error';
+    this.toastMessage = message;
+    this.showToast = true;
+    setTimeout(() => { this.showToast = false; }, 3500);
   }
 
   handleTableAction(event: { action: string; row: any }): void {
@@ -120,7 +127,10 @@ export class PurchaseOrderComponent implements OnInit {
           this.showSuccessToast('Purchase Order issued successfully!');
           this.loadData();
         },
-        error: (err) => console.error('Failed to issue PO', err)
+        error: (err) => {
+          console.error('Failed to issue PO', err);
+          this.showErrorToast('Failed to issue Purchase Order. Please try again.');
+        }
       });
     }
   }
@@ -140,7 +150,13 @@ export class PurchaseOrderComponent implements OnInit {
         };
         this.isDrawerOpen = true;
       },
-      error: (err) => console.error('Failed to fetch PO details', err)
+      error: (err) => {
+        console.error('Failed to fetch PO details', err);
+        this.showErrorToast('Failed to load order details. Please try again.');
+        this.isDrawerOpen = false;
+        this.isEditMode = false;
+        this.isViewMode = false;
+      }
     });
   }
 
@@ -164,6 +180,7 @@ export class PurchaseOrderComponent implements OnInit {
       error: (err) => {
         console.error('Failed to save PO', err);
         this.isSaving = false;
+        this.showErrorToast('Failed to save changes. Please try again.');
       }
     });
   }

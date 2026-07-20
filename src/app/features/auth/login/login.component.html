@@ -1,14 +1,35 @@
 <div class="animate-fade-in min-h-screen flex flex-col lg:flex-row">
-  
+
   <div class="hidden lg:flex w-1/2 bg-brand-900 text-white items-center justify-center p-12 relative overflow-hidden">
     <div class="absolute -top-24 -right-24 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
     <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl"></div>
 
     <div class="relative z-10 max-w-md">
-      <div class="w-12 h-12 rounded bg-brand-600 flex items-center justify-center text-white font-bold text-2xl mb-6">H</div>
-      <h1 class="text-4xl font-bold mb-4">Hoodle</h1>
-      <p class="text-brand-100 text-lg mb-8">Procurement, simplified for your team. Manage purchase requests, approvals, vendors, and payments — all in one place.</p>
-      
+      <div class="mb-10">
+        <div class="flex items-center gap-4 mb-6">
+          <!-- Unboxed, floating SVG Logo -->
+          <div class="w-16 h-16 drop-shadow-2xl transform transition-transform hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-full h-full">
+              <!-- Left Pillar -->
+              <rect x="35" y="25" width="36" height="150" rx="18" fill="var(--color-brand-400, #7F77DD)" />
+              <!-- Right Pillar (Light color pops beautifully on brand-900) -->
+              <rect x="129" y="25" width="36" height="150" rx="18" fill="var(--color-brand-100, #CECBF6)" />
+              <!-- Crossbar -->
+              <rect x="50" y="82" width="100" height="36" rx="18" fill="var(--color-brand-400, #7F77DD)"
+                transform="rotate(-10, 100, 100)" />
+            </svg>
+          </div>
+
+          <!-- Brand Name aligned with Logo -->
+          <h1 class="text-5xl font-bold text-white tracking-tight">Hoodle</h1>
+        </div>
+
+        <p class="text-brand-100 text-lg leading-relaxed">
+          Procurement, simplified for your team. Manage purchase requests, approvals, vendors, and payments — all in one
+          place.
+        </p>
+      </div>
+
       <div class="space-y-4">
         <div class="flex items-center gap-4 text-brand-50">
           <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-sm">✓</div>
@@ -24,7 +45,7 @@
 
   <div class="w-full lg:w-1/2 bg-white flex items-center justify-center p-8 sm:p-12">
     <div class="w-full max-w-md">
-      
+
       <div class="mb-8">
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome back</h2>
         <p class="text-gray-500">Sign in to your workspace</p>
@@ -36,10 +57,9 @@
       </div>
 
       <form (ngSubmit)="onSubmit()" class="space-y-5">
-        
+
         <div class="relative">
-          <input type="email" id="email" name="email" [(ngModel)]="email" required
-            placeholder=" "
+          <input type="email" id="email" name="email" [(ngModel)]="email" required placeholder=" "
             class="block w-full px-4 pt-6 pb-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-brand-600 peer transition-all">
           <label for="email"
             class="absolute text-gray-500 duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-brand-600 cursor-text">
@@ -48,24 +68,28 @@
         </div>
 
         <div class="relative">
-          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password" required
-            placeholder=" "
+          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password"
+            required placeholder=" "
             class="block w-full px-4 pt-6 pb-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-brand-600 peer transition-all pr-10">
           <label for="password"
             class="absolute text-gray-500 duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-brand-600 cursor-text">
             Password
           </label>
-            
-          <button *ngIf="password && password.length > 0" type="button" (click)="togglePassword()" 
-                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none">
-            
-            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+
+          <button *ngIf="password && password.length > 0" type="button" (click)="togglePassword()"
+            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none">
+
+            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
             </svg>
 
-            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
             </svg>
           </button>
         </div>
@@ -78,13 +102,16 @@
           <a href="#" class="text-sm font-medium text-brand-600 hover:text-brand-800">Forgot password?</a>
         </div>
 
-        <button type="submit" [disabled]="isLoading" 
+        <button type="submit" [disabled]="isLoading"
           class="w-full bg-brand-600 hover:bg-brand-800 text-white font-medium py-2.5 rounded-lg transition-colors mt-4 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
           <span *ngIf="!isLoading">Sign in</span>
           <span *ngIf="isLoading" class="flex items-center">
-            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
             </svg>
             Signing in...
           </span>
@@ -94,7 +121,7 @@
 
       <div class="mt-8 pt-6 border-t border-gray-200">
         <p class="text-center text-sm text-gray-600">
-          Don't have an account? 
+          Don't have an account?
           <a routerLink="/signup" class="font-medium text-brand-600 hover:text-brand-800">Create one</a>
         </p>
       </div>

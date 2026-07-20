@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Solid White Squircle Background to ensure it pops on all browser tabs -->
+  <rect width="200" height="200" rx="45" fill="#FFFFFF" />
+  
+  <!-- The H Logo (Scaled slightly to fit nicely inside the background) -->
+  <rect x="45" y="40" width="32" height="120" rx="16" fill="#7F77DD" />
+  <rect x="123" y="40" width="32" height="120" rx="16" fill="#26215C" />
+  <rect x="60" y="86" width="80" height="28" rx="14" fill="#534AB7" transform="rotate(-10, 100, 100)" />
+</svg>
