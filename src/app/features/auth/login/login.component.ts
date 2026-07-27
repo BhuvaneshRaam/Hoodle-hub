@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,18 @@ export class LoginComponent {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private authSvc: AuthService, private router: Router) {}
+  constructor(private authSvc: AuthService, private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    // Listen for SSO rejection errors sent from the Spring Boot backend
+    this.route.queryParams.subscribe(params => {
+      if (params['error'] === 'not_invited') {
+        this.errorMessage = "Your email is not associated with an active Hoodle workspace. Please ask your administrator for an invite.";
+      } else if (params['error']) {
+        this.errorMessage = "Authentication failed. Please try again.";
+      }
+    });
+  }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -48,7 +60,7 @@ export class LoginComponent {
     });
   }
 
-  onSocialLogin(provider: string) {
-    console.log('SSO login with:', provider);
+  loginWithSSO() {
+    window.location.href = `${environment.authUrl}/hoodle/oauth2/authorization/google`;
   }
 }

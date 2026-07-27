@@ -1,0 +1,4 @@
+itemCode,itemName,department,batchNo,transactionNo,transactionDate,unit,transType,transMode,transQuantity,mrp,openingStock,closingStock,createdBy
+LDRG_601,EDR REFRESH TEARS 10ML,GHA_PHR,426006,D-GHA/OP/9/2627,2026-04-08,NOS,SALES,SUB,2.00,160.00,30.00,28.00,democh@ahclbeta.test
+LDRG_601,EDR REFRESH TEARS 10ML,GHA_PHR,426006,D-GHA/OP/15/2627,2026-04-08,NOS,SALES,SUB,1.00,160.00,28.00,27.00,democh@ahclbeta.test
+LDRG_601,EDR REFRESH TEARS 10ML,PCE_PHR,kir123608,,2026-06-12,NOS,STOCK_UPLOAD,ADD,7.00,140.03,0.00,7.00,kirankumar.r@dragarwal.com
