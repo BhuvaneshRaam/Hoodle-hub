@@ -31,20 +31,14 @@ export class AuthService {
 
 
   public register(userData: any): Observable<any> {
-    return this.http.post<any>(this.AUTH_ROOT_PATH +'/signup', userData);
+    return this.http.post<any>(this.AUTH_ROOT_PATH + '/signup', userData);
   }
 
   /**
    * Calls your backend login endpoint and saves the token
    */
   public login(credentials: any): Observable<any> {
-    // Assuming your backend returns an object like { token: 'ey...' }
     return this.http.post<any>(this.AUTH_ROOT_PATH + '/sign-in', credentials).pipe(
-      // tap(response => {
-      //   if (response && response.token) {
-      //     localStorage.setItem(this.TOKEN_KEY, response.token);
-      //   }
-      // }),
       switchMap(() => this.fetchInitData())
     );
   }
@@ -104,7 +98,7 @@ export class AuthService {
   }
 
 
-  
+
   public initializeApp(): Observable<any> {
     return this.fetchInitData().pipe(
       catchError((error) => {

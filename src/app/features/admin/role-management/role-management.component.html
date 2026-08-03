@@ -1,0 +1,117 @@
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Roles & Permissions</h1>
+            <p class="text-sm text-gray-500 mt-1">Define custom roles and their exact access levels.</p>
+        </div>
+
+        <button
+            class="bg-brand-600 hover:bg-brand-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            (click)="openCreateDrawer()">
+            + Create Role
+        </button>
+    </div>
+
+    <!-- Main Data Table -->
+    <app-data-table [columns]="roleColumns" [data]="roles()" [selectable]="false"
+        (actionClicked)="handleTableAction($event)">
+    </app-data-table>
+
+    <!-- Create/Edit Role Drawer -->
+    <app-side-drawer [isOpen]="isDrawerOpen"
+        [title]="isViewMode ? 'View Role Details' : (isEditMode ? 'Edit Role' : 'Create Custom Role')"
+        (closed)="isDrawerOpen = false">
+
+        <form class="space-y-6">
+
+            <!-- Role Name Input -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Role Name <span
+                        class="text-red-500">*</span></label>
+                <input type="text" placeholder="e.g. Finance Manager" name="roleName" [(ngModel)]="roleName"
+                    [disabled]="isViewMode || roleName === 'TENANT_ADMIN'"
+                    class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-brand-600 outline-none transition-all disabled:bg-gray-100 disabled:text-gray-500">
+
+                @if (!isViewMode && roleName === 'TENANT_ADMIN') {
+                <p class="text-xs text-amber-600 mt-1">System roles cannot be renamed.</p>
+                }
+            </div>
+
+            <!-- Permission Matrix -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Module Permissions</label>
+
+                <div class="overflow-x-auto bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <table class="w-full text-left text-sm text-gray-700">
+                        <thead class="bg-gray-50 text-gray-900 border-b border-gray-200 text-xs uppercase font-bold">
+                            <tr>
+                                <th class="px-4 py-3 whitespace-nowrap">Module</th>
+                                @for (col of privilegeColumns; track col) {
+                                <th class="px-2 py-3 whitespace-nowrap text-center">{{ col }}</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @for (module of matrix(); track module.moduleName) {
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">
+                                    {{ formatModuleName(module.moduleName) }}
+                                </td>
+
+                                @for (col of privilegeColumns; track col) {
+                                <td class="px-2 py-3 whitespace-nowrap text-center">
+                                    @if (getPermissionIdForCell(module, col); as permId) {
+                                    <input type="checkbox"
+                                        class="w-4 h-4 text-brand-600 border-gray-300 rounded focus:ring-brand-600 cursor-pointer"
+                                        [checked]="selectedPermissions.has(permId)" (change)="togglePermission(permId)"
+                                        [disabled]="isViewMode || roleName === 'TENANT_ADMIN'">
+                                    } @else {
+                                    <span class="text-gray-300 font-bold">-</span>
+                                    }
+                                </td>
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Status Toggle (Only show on Edit) -->
+            @if ((isEditMode || isViewMode) && roleName !== 'TENANT_ADMIN') {
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="statusToggle" name="isActive" [(ngModel)]="isActive" [disabled]="isViewMode"
+                    class="w-4 h-4 text-brand-600 border-gray-300 rounded focus:ring-brand-600 cursor-pointer">
+                <label for="statusToggle" class="text-sm font-medium text-gray-700 cursor-pointer" [class.cursor-pointer]="!isViewMode"> Role is Active</label>
+            </div>
+            }
+
+        </form>
+
+        <!-- Drawer Footer -->
+        <div drawer-footer class="flex w-full justify-end gap-3">
+            <button
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                (click)="isDrawerOpen = false">{{ isViewMode ? 'Close' : 'Cancel' }}</button>
+
+            @if (!isViewMode) {
+            <button
+                class="bg-brand-600 hover:bg-brand-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[140px]"
+                (click)="saveRole()" [disabled]="!roleName || selectedPermissions.size === 0 || isSubmitting">
+                @if (isSubmitting) {
+                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Saving...
+                } @else {
+                  {{ isEditMode ? 'Save Changes' : 'Create Role' }}
+                }
+            </button>
+            }
+        </div>
+    </app-side-drawer>
+
+</div>
