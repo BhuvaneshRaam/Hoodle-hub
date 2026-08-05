@@ -19,7 +19,13 @@
     [columns]="userColumns" 
     [data]="users()" 
     [selectable]="false"
-    (actionClicked)="handleTableAction($event)">
+    [showPagination]="true"
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    [totalElements]="totalElements"
+    [pageSize]="pageSize"
+    (actionClicked)="handleTableAction($event)"
+    (pageChanged)="handlePageChange($event)">
   </app-data-table>
 
   <!-- Reusable Side Drawer for the Form -->
@@ -76,7 +82,7 @@
                 <div class="flex justify-between items-center">
                   <span class="block text-sm font-bold text-gray-900" 
                         [class.text-brand-700]="isRoleSelected(role.id)">
-                    {{ formatName(role.name) }}
+                    {{ formatName(role.roleName) }}
                   </span>
                   <button type="button" (click)="toggleExpandRole($event, role.id)"
                     class="text-xs font-medium text-brand-600 hover:text-brand-800 hover:underline flex items-center transition-colors">

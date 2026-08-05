@@ -29,8 +29,15 @@ export class RoleManagementComponent {
 
   isSubmitting: boolean = false;
 
+  currentPage = 0;
+  pageSize = 10;
+  totalElements = 0;
+  totalPages = 0;
+  searchQuery = '';
+  searchTimeout: any;
+
   roleColumns: TableColumn[] = [
-    { key: 'name', header: 'Role Name', type: 'text' },
+    { key: 'roleName', header: 'Role Name', type: 'text' },
     { key: 'permissionCount', header: 'Permissions', type: 'text' },
     { key: 'statusBadge', header: 'Status', type: 'badge' },
     { key: 'actions', header: 'Actions', type: 'action', actions: [{ actionKey: 'EDIT', label: 'Edit' }, { actionKey: 'VIEW', label: 'View' },] }
@@ -61,8 +68,8 @@ export class RoleManagementComponent {
       this.isViewMode = event.action === 'VIEW'; 
       this.isEditMode = event.action === 'EDIT';
       this.editingRoleId = event.row.id;
-      this.roleName = event.row.name;
-      this.isActive = event.row.active;
+      this.roleName = event.row.roleName;
+      this.isActive = event.row.isActive;
       
       this.selectedPermissions.clear();
       if (event.row.permissions) {
@@ -77,12 +84,13 @@ export class RoleManagementComponent {
 
   loadRoles() {
     this.isLoading.set(true);
-    this.adminService.getAllTenantRoles().subscribe({
+    this.adminService.getAllTenantRoles(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (data) => {
-        const mappedRoles = data.map((role: any) => ({
+        console.log('Fetched roles:', data);
+        const mappedRoles = data.content.map((role: any) => ({
           ...role,
           permissionCount: `${role.permissions?.length || 0} Permissions`,
-          statusBadge: role.active ? 'ACTIVE' : 'INACTIVE'
+          statusBadge: role.isActive ? 'ACTIVE' : 'INACTIVE'
         }));
         this.roles.set(mappedRoles);
         this.isLoading.set(false);
@@ -157,5 +165,10 @@ export class RoleManagementComponent {
   formatModuleName(name: string): string {
     if (!name) return '';
     return name.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+  }
+
+  handlePageChange(newPage: number) {
+    this.currentPage = newPage;
+    this.loadRoles();
   }
 }
