@@ -16,7 +16,13 @@
 
     <!-- Main Data Table -->
     <app-data-table [columns]="roleColumns" [data]="roles()" [selectable]="false"
-        (actionClicked)="handleTableAction($event)">
+        [showPagination]="true"
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        [totalElements]="totalElements"
+        [pageSize]="pageSize"
+        (actionClicked)="handleTableAction($event)"
+        (pageChanged)="handlePageChange($event)">
     </app-data-table>
 
     <!-- Create/Edit Role Drawer -->

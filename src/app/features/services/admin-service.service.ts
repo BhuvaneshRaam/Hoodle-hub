@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { UserRequest } from '../admin/models/user-request.model';
 import { RoleRequest } from '../admin/models/role-request.model';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,16 @@ export class AdminServiceService {
 
   constructor(private httpService: HttpServiceService) { }
 
-  getAllTenantUsers() {
-    return this.httpService.get<any>(this.USER + '/all');
+  // getAllTenantUsers() {
+  //   return this.httpService.get<any>(this.USER + '/all');
+  // }
+
+  getAllTenantUsers(page: number, size: number, search: string) {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('search', search);
+    return this.httpService.get<any>(this.USER + '/all', { params });
   }
 
   createUser(request: UserRequest){
@@ -30,8 +39,17 @@ export class AdminServiceService {
     return this.httpService.post (`${this.USER}/${userId}`, request);
   }
 
-  getAllTenantRoles() {
-    return this.httpService.get<any>(this.ROLE + '/all');
+  getAllTenantRolesList() {
+    return this.httpService.get<any>(this.ROLE + '/list');
+  }
+
+  getAllTenantRoles(page: number, size: number, search: string) {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('search', search);
+
+    return this.httpService.get<any>(this.ROLE + '/all', { params });
   }
 
   createRole(request: RoleRequest) {

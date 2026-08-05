@@ -35,6 +35,13 @@ export class UserManagementComponent {
 
   isSubmitting: boolean = false;
 
+  currentPage = 0;
+  pageSize = 10;
+  totalElements = 0;
+  totalPages = 0;
+  searchQuery = '';
+  searchTimeout: any;
+
   userColumns: TableColumn[] = [
     { key: 'userName', header: 'Name', type: 'text' },
     { key: 'emailId', header: 'Email', type: 'text' },
@@ -58,14 +65,16 @@ export class UserManagementComponent {
 
   loadUsers() {
     this.isLoading.set(true);
-    this.adminSvc.getAllTenantUsers().subscribe({
-      next: (data: any[]) => {
-        const mappedUsers = data.map((user: any) => ({
+    this.adminSvc.getAllTenantUsers(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+      next: (response: any) => {
+        const mappedUsers = response.content.map((user: any) => ({
           ...user,
           roleNames: user.roles.map((r: any) => r.name).join(', '),
-          statusBadge: user.active ? 'ACTIVE' : 'INACTIVE' 
+          statusBadge: user.isActive ? 'ACTIVE' : 'INACTIVE' 
         }));
         this.users.set(mappedUsers);
+        this.totalElements = response.totalElements;
+        this.totalPages = response.totalPages;
         this.isLoading.set(false);
       },
       error: (err) => console.error('Failed to fetch users', err)
@@ -73,8 +82,8 @@ export class UserManagementComponent {
   }
 
   loadRoles() {
-    this.adminSvc.getAllTenantRoles().subscribe({
-      next: (data) => this.availableRoles.set(data),
+    this.adminSvc.getAllTenantRolesList().subscribe({
+      next: (response: any) => this.availableRoles.set(response),
       error: (err) => console.error('Failed to fetch roles', err)
     });
   }
@@ -87,7 +96,7 @@ export class UserManagementComponent {
       this.editingUserId = event.row.userUuid; 
       this.userName = event.row.userName || event.row.name || ''; 
       this.emailId = event.row.emailId || event.row.email || '';
-      this.isActive = event.row.active !== undefined ? event.row.active : true;
+      this.isActive = event.row.isActive !== undefined ? event.row.isActive : true;
 
       this.selectedRoles.clear();
       if (event.row.roles) {
@@ -155,8 +164,8 @@ export class UserManagementComponent {
     if (!permissions) return [];
     
     const grouped = permissions.reduce((acc: any, perm: any) => {
-      const modName = this.formatName(perm.module.name);
-      const privName = this.formatName(perm.privilege.name);
+      const modName = this.formatName(perm.module);
+      const privName = this.formatName(perm.privilege);
       
       if (!acc[modName]) {
         acc[modName] = [];
@@ -211,5 +220,10 @@ export class UserManagementComponent {
         }
       });
     }
+  }
+
+  handlePageChange(newPage: number) {
+    this.currentPage = newPage;
+    this.loadUsers();
   }
 }
