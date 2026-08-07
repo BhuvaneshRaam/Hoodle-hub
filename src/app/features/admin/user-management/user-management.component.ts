@@ -69,7 +69,7 @@ export class UserManagementComponent {
       next: (response: any) => {
         const mappedUsers = response.content.map((user: any) => ({
           ...user,
-          roleNames: user.roles.map((r: any) => r.name).join(', '),
+          roleNames: user.roles.map((r: any) => r.roleName).join(', '),
           statusBadge: user.isActive ? 'ACTIVE' : 'INACTIVE' 
         }));
         this.users.set(mappedUsers);
@@ -225,5 +225,17 @@ export class UserManagementComponent {
   handlePageChange(newPage: number) {
     this.currentPage = newPage;
     this.loadUsers();
+  }
+
+  onSearchChange(query: string) {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    
+    this.searchTimeout = setTimeout(() => {
+      this.searchQuery = query; 
+      this.currentPage = 0; 
+      this.loadUsers(); 
+    }, 500);
   }
 }

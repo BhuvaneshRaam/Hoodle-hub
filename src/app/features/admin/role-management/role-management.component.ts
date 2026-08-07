@@ -37,11 +37,28 @@ export class RoleManagementComponent {
   searchTimeout: any;
 
   roleColumns: TableColumn[] = [
-    { key: 'roleName', header: 'Role Name', type: 'text' },
-    { key: 'permissionCount', header: 'Permissions', type: 'text' },
-    { key: 'statusBadge', header: 'Status', type: 'badge' },
-    { key: 'actions', header: 'Actions', type: 'action', actions: [{ actionKey: 'EDIT', label: 'Edit' }, { actionKey: 'VIEW', label: 'View' },] }
-  ];
+  { key: 'roleName', header: 'Role Name', type: 'text' },
+  { key: 'permissionCount', header: 'Permissions', type: 'text' },
+  { key: 'statusBadge', header: 'Status', type: 'badge' },
+  {
+    key: 'actions',
+    header: 'Actions',
+    type: 'action',
+    actions: [
+      {
+        label: 'View',
+        actionKey: 'VIEW',
+        colorClass: 'text-brand-700 bg-brand-50 border-brand-200 hover:bg-brand-100'
+      },
+      {
+        label: 'Edit',
+        actionKey: 'EDIT',
+        colorClass: 'text-gray-700 bg-gray-50 border-gray-200 hover:bg-gray-100',
+        showIf: (row: any) => row.roleName !== 'TENANT_ADMIN' && row.name !== 'TENANT_ADMIN'
+      }
+    ]
+  }
+];
 
   privilegeColumns = ['READ', 'CREATE', 'UPDATE', 'DELETE', 'APPROVE'];
   isViewMode: boolean= false;
@@ -55,6 +72,7 @@ export class RoleManagementComponent {
 
 
   openCreateDrawer() {
+    this.isViewMode = false;
     this.isEditMode = false;
     this.editingRoleId = null;
     this.roleName = '';
@@ -170,5 +188,17 @@ export class RoleManagementComponent {
   handlePageChange(newPage: number) {
     this.currentPage = newPage;
     this.loadRoles();
+  }
+
+  onSearchChange(query: string) {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    
+    this.searchTimeout = setTimeout(() => {
+      this.searchQuery = query; 
+      this.currentPage = 0; 
+      this.loadRoles(); 
+    }, 500);
   }
 }

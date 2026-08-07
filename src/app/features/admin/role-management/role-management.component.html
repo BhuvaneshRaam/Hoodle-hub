@@ -21,6 +21,8 @@
         [totalPages]="totalPages"
         [totalElements]="totalElements"
         [pageSize]="pageSize"
+        [showSearch]="true"
+        (searchChanged)="onSearchChange($event)"
         (actionClicked)="handleTableAction($event)"
         (pageChanged)="handlePageChange($event)">
     </app-data-table>

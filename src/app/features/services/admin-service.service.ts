@@ -23,11 +23,7 @@ export class AdminServiceService {
   // }
 
   getAllTenantUsers(page: number, size: number, search: string) {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString())
-      .set('search', search);
-    return this.httpService.get<any>(this.USER + '/all', { params });
+    return this.httpService.get<any>(this.USER + '/all', { page, size, search });
   }
 
   createUser(request: UserRequest){
@@ -44,12 +40,7 @@ export class AdminServiceService {
   }
 
   getAllTenantRoles(page: number, size: number, search: string) {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString())
-      .set('search', search);
-
-    return this.httpService.get<any>(this.ROLE + '/all', { params });
+    return this.httpService.get<any>(this.ROLE + '/all', { page, size, search });
   }
 
   createRole(request: RoleRequest) {
