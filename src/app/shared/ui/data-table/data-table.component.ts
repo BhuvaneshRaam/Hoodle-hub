@@ -27,6 +27,8 @@ export class DataTableComponent {
 
   @Input() selectable: boolean = false;
 
+  @Input() showSearch: boolean = false;
+
   @Input() showPagination: boolean = false;
   @Input() currentPage: number = 0;
   @Input() totalPages: number = 1;
@@ -35,6 +37,10 @@ export class DataTableComponent {
 
   @Output() actionClicked = new EventEmitter<{ action: string; row: any }>();
   @Output() pageChanged = new EventEmitter<number>();
+  
+  @Output() searchChanged = new EventEmitter<string>();
+
+  searchQuery: string = '';  
 
   onActionClick(actionKey: string, row: any) {
     this.actionClicked.emit({ action: actionKey, row });
@@ -64,5 +70,15 @@ export class DataTableComponent {
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       })
       .join(' ');
+  }
+
+  onSearchInput(event: any) {
+    this.searchQuery = event.target.value;
+    this.searchChanged.emit(this.searchQuery);
+  }
+
+  clearSearch() {
+    this.searchQuery = '';
+    this.searchChanged.emit(this.searchQuery); 
   }
 }
