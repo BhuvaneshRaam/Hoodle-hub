@@ -15,7 +15,10 @@
     </div>
 
     <!-- Main Data Table -->
-    <app-data-table [columns]="roleColumns" [data]="roles()" [selectable]="false"
+    <app-data-table [columns]="roleColumns" 
+        [data]="roles()" 
+        [isLoading]="isLoading()"
+        [selectable]="false"
         [showPagination]="true"
         [currentPage]="currentPage"
         [totalPages]="totalPages"

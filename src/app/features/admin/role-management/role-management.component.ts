@@ -111,6 +111,8 @@ export class RoleManagementComponent {
           statusBadge: role.isActive ? 'ACTIVE' : 'INACTIVE'
         }));
         this.roles.set(mappedRoles);
+        this.totalElements = data.totalElements;
+        this.totalPages = data.totalPages;
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -191,14 +193,8 @@ export class RoleManagementComponent {
   }
 
   onSearchChange(query: string) {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-    
-    this.searchTimeout = setTimeout(() => {
-      this.searchQuery = query; 
-      this.currentPage = 0; 
-      this.loadRoles(); 
-    }, 500);
+    this.searchQuery = query;
+    this.currentPage = 0;
+    this.loadRoles();
   }
 }
