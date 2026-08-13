@@ -77,7 +77,10 @@ export class UserManagementComponent {
         this.totalPages = response.totalPages;
         this.isLoading.set(false);
       },
-      error: (err) => console.error('Failed to fetch users', err)
+      error: (err) => {
+        console.error('Failed to fetch users', err);
+        this.isLoading.set(false);
+      }
     });
   }
 
@@ -228,14 +231,8 @@ export class UserManagementComponent {
   }
 
   onSearchChange(query: string) {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-    
-    this.searchTimeout = setTimeout(() => {
-      this.searchQuery = query; 
-      this.currentPage = 0; 
-      this.loadUsers(); 
-    }, 500);
+    this.searchQuery = query;
+    this.currentPage = 0;
+    this.loadUsers();
   }
 }

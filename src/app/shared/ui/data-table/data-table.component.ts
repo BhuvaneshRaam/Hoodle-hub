@@ -40,6 +40,8 @@ export class DataTableComponent {
   
   @Output() searchChanged = new EventEmitter<string>();
 
+  @Input() isLoading: boolean = false;
+
   searchQuery: string = '';  
 
   onActionClick(actionKey: string, row: any) {
@@ -72,9 +74,12 @@ export class DataTableComponent {
       .join(' ');
   }
 
+  triggerSearch() {
+    this.searchChanged.emit(this.searchQuery);
+  }
+
   onSearchInput(event: any) {
     this.searchQuery = event.target.value;
-    this.searchChanged.emit(this.searchQuery);
   }
 
   clearSearch() {

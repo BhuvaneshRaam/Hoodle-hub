@@ -18,6 +18,7 @@
   <app-data-table 
     [columns]="userColumns" 
     [data]="users()" 
+    [isLoading]="isLoading()"
     [selectable]="false"
     [showPagination]="true"
     [currentPage]="currentPage"
