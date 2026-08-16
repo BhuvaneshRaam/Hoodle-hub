@@ -48,6 +48,10 @@ import { PurchaseRequestComponent } from './features/procurement/purchase-reques
                     loadComponent: () => import('./features/procurement/purchase-order/purchase-order.component').then(c => c.PurchaseOrderComponent)
                 },
                 {
+                    path: 'vendors',
+                    loadComponent: () => import('./features/procurement/vendor/vendor.component').then(c => c.VendorComponent)
+                },
+                {
                 path: 'admin',
                 children: [
                     { path: '', redirectTo: 'users', pathMatch: 'full' },
