@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { DataTableComponent, TableColumn } from '../../../shared/ui/data-table/data-table.component';
 import { SideDrawerComponent } from '../../../shared/ui/side-drawer/side-drawer.component';
 import { PoServiceService } from '../../services/po-service.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-purchase-order',
@@ -53,19 +54,21 @@ export class PurchaseOrderComponent implements OnInit {
         {
           label: 'View',
           actionKey: 'VIEW',
-          colorClass: 'text-gray-700 bg-white border-gray-200 hover:bg-gray-50 shadow-sm'
+          colorClass: 'text-gray-700 bg-white border-gray-200 hover:bg-gray-50 shadow-sm' 
         },
         {
           label: 'Edit',
           actionKey: 'EDIT',
           colorClass: 'text-gray-700 bg-white border-gray-200 hover:bg-gray-50 shadow-sm',
-          showIf: (row) => row.status === 'DRAFT'
+          showIf: (row) => row.status === 'DRAFT' && 
+          this.authService.hasAccess('PURCHASE_ORDERS', 'UPDATE')
         },
         {
           label: 'Issue',
           actionKey: 'ISSUE',
           colorClass: 'text-brand-700 bg-brand-50 border-brand-200 hover:bg-brand-100',
-          showIf: (row) => row.status === 'DRAFT'
+          showIf: (row) => row.status === 'DRAFT' && 
+          this.authService.hasAccess('PURCHASE_ORDERS', 'APPROVE')
         }
       ]
     }
@@ -73,7 +76,8 @@ export class PurchaseOrderComponent implements OnInit {
 
   constructor(
     private poService: PoServiceService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {

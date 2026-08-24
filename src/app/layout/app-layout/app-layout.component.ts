@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { HasPermissionDirective } from '../../core/utils/has-permission.directive';
 
 @Component({
   selector: 'app-app-layout',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, HasPermissionDirective],
   templateUrl: './app-layout.component.html',
   styleUrls: ['./app-layout.component.css']
 })

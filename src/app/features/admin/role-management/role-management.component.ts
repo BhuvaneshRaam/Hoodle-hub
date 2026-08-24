@@ -60,7 +60,7 @@ export class RoleManagementComponent {
   }
 ];
 
-  privilegeColumns = ['READ', 'CREATE', 'UPDATE', 'DELETE', 'APPROVE'];
+  privilegeColumns = ['READ', 'READ_ALL', 'CREATE', 'UPDATE', 'DELETE', 'APPROVE'];
   isViewMode: boolean= false;
 
   constructor(private adminService: AdminServiceService, private toastSvc: ToastService) {}

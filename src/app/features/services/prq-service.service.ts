@@ -12,8 +12,12 @@ export class PrqServiceService {
   private orbitUrl = environment.orbitUrl + '/orbitorder/api/v1';
   private PRQ = this.orbitUrl + '/prq';
 
+  getUserRequests(page: number, size: number) {
+    return this.httpService.get<any>(this.PRQ , { page, size});
+  }
+
   // GET all requests
-  getAllRequests(page: number = 0, size: number = 10) {
+  getAllRequests(page: number, size: number) {
     return this.httpService.get<any>(this.PRQ + '/all', { page, size });
   }
 
