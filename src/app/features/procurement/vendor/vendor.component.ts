@@ -5,6 +5,7 @@ import { DataTableComponent, TableColumn } from '../../../shared/ui/data-table/d
 import { SideDrawerComponent } from '../../../shared/ui/side-drawer/side-drawer.component';
 import { VendorServiceService } from '../../services/vendor-service.service';
 import { ToastService } from '../../../shared/services/toast.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 export interface VendorListResponse {
   uuid?: string;
@@ -41,7 +42,8 @@ export interface VendorCreateRequest {
 export class VendorComponent {
   constructor(
     private vendorService: VendorServiceService,
-    private toastSvc: ToastService
+    private toastSvc: ToastService,
+    private authService: AuthService
   ) {}
 
   vendors = signal<VendorListResponse[]>([]);
@@ -79,7 +81,7 @@ export class VendorComponent {
       type: 'action',
       actions: [
         { actionKey: 'VIEW', label: 'View', colorClass: 'text-gray-600 bg-gray-100 hover:bg-gray-200' },
-        { actionKey: 'EDIT', label: 'Edit', colorClass: 'text-brand-600 bg-brand-50 hover:bg-brand-100' }
+        { actionKey: 'EDIT', label: 'Edit', colorClass: 'text-brand-600 bg-brand-50 hover:bg-brand-100', showIf: () => this.authService.hasAccess('VENDORS', 'UPDATE') }
       ]
     }
   ];
@@ -88,6 +90,7 @@ export class VendorComponent {
     this.loadVendors();
   }
 
+  
   loadVendors(): void {
     this.isLoading.set(true);
 

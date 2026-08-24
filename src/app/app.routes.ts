@@ -4,6 +4,7 @@ import { AppLayoutComponent } from './layout/app-layout/app-layout.component';
 import { noAuthGuard } from './core/guards/no-auth.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { PurchaseRequestComponent } from './features/procurement/purchase-request/purchase-request.component';
+import { permissionGuard } from './core/guards/permission.guard';
 
     export const routes: Routes = [
         {
@@ -28,7 +29,10 @@ import { PurchaseRequestComponent } from './features/procurement/purchase-reques
             ]
 
         },
-
+        {
+                    path: 'forbidden',
+                    loadComponent: () => import('./shared/ui/forbidden/forbidden.component').then(m => m.ForbiddenComponent)
+        },
         {
             path: 'app',
             component: AppLayoutComponent,
@@ -41,14 +45,20 @@ import { PurchaseRequestComponent } from './features/procurement/purchase-reques
                 },
                 {
                     path: 'prq',
+                    canActivate: [permissionGuard],
+                    data: {requiredModule: 'PURCHASE_REQUESTS', requiredPrivilege: 'READ'},
                     loadComponent: () => import('./features/procurement/purchase-request/purchase-request.component').then(c => c.PurchaseRequestComponent)
                 },
                 {
                     path: 'purchase-orders',
+                    canActivate: [permissionGuard],
+                    data: {requiredModule: 'PURCHASE_ORDERS', requiredPrivilege: 'READ'},
                     loadComponent: () => import('./features/procurement/purchase-order/purchase-order.component').then(c => c.PurchaseOrderComponent)
                 },
                 {
                     path: 'vendors',
+                    canActivate: [permissionGuard],
+                    data: {requiredModule: 'VENDORS', requiredPrivilege: 'READ'},
                     loadComponent: () => import('./features/procurement/vendor/vendor.component').then(c => c.VendorComponent)
                 },
                 {

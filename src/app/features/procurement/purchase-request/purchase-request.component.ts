@@ -6,6 +6,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { SideDrawerComponent } from '../../../shared/ui/side-drawer/side-drawer.component';
 import { Router } from '@angular/router';
 import { PoServiceService } from '../../services/po-service.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-purchase-request',
@@ -18,7 +19,8 @@ export class PurchaseRequestComponent {
   constructor(
     private prqService: PrqServiceService,
     private poService: PoServiceService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   prqData: any[] = [];
@@ -86,25 +88,25 @@ export class PurchaseRequestComponent {
           label: 'Edit', 
           actionKey: 'EDIT', 
           colorClass: 'text-gray-700 bg-white border-gray-200 hover:bg-gray-50 shadow-sm',
-          showIf: (row) => row.status === 'DRAFT' 
+          showIf: (row) => row.status === 'DRAFT' && this.authService.hasAccess('PURCHASE_REQUESTS', 'UPDATE')
         },
         { 
           label: 'Submit', 
           actionKey: 'SUBMIT', 
           colorClass: 'text-brand-700 bg-brand-50 border-brand-200 hover:bg-brand-100', 
-          showIf: (row) => row.status === 'DRAFT' 
+          showIf: (row) => row.status === 'DRAFT' && this.authService.hasAccess('PURCHASE_REQUESTS', 'UPDATE')
         },
         { 
           label: 'Approve', 
           actionKey: 'APPROVE', 
           colorClass: 'text-green-700 bg-green-50 border-green-200 hover:bg-green-100',
-          showIf: (row) => row.status === 'SUBMITTED' 
+          showIf: (row) => row.status === 'SUBMITTED' && this.authService.hasAccess('PURCHASE_REQUESTS', 'APPROVE')
         },
         { 
           label: 'Create PO', 
           actionKey: 'CREATE_PO', 
           colorClass: 'text-brand-700 bg-brand-50 border-brand-200 hover:bg-brand-100',
-          showIf: (row) => row.status === 'APPROVED' 
+          showIf: (row) => row.status === 'APPROVED' && this.authService.hasAccess('PURCHASE_ORDERS', 'CREATE')
         }
       ]
     }
@@ -203,7 +205,11 @@ export class PurchaseRequestComponent {
   }
 
   loadData() {
-    this.prqService.getAllRequests(this.currentPage, this.pageSize).subscribe({
+    const canReadAll = this.authService.hasAccess('PURCHASE_REQUESTS', 'READ_ALL');
+    const apiCall = canReadAll 
+      ? this.prqService.getAllRequests(this.currentPage, this.pageSize)
+      : this.prqService.getUserRequests(this.currentPage, this.pageSize); 
+    apiCall.subscribe({
       next: (response: any) => {
         this.prqData = response.content;
         this.totalPages = response.totalPages;

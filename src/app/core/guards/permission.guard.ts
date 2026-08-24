@@ -15,7 +15,7 @@ export const permissionGuard: CanActivateFn = (route, state) => {
   } else {
     // Logged in, but unauthorized for this specific page
     console.warn(`Access Denied: Missing ${requiredPrivilege} on ${requiredModule}`);
-    router.navigate(['/app/dashboard']); 
+    router.navigate(['/forbidden']); 
     return false;
   }
 };
