@@ -70,6 +70,41 @@
         </div>
     </section>
 
+    <section id="docs" class="text-center px-4 pt-20 pb-16 max-w-6xl mx-auto scroll-mt-24">
+        <!-- Text Content -->
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-800 text-sm font-medium mb-8">
+                <span class="w-2 h-2 rounded-full bg-brand-600"></span> Built for modern enterprises
+            </div>
+
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-brand-900 leading-tight">
+                Procurement that moves as <br class="hidden md:block"> fast as your team
+            </h1>
+
+            <p class="text-xl text-brand-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Raise requests, get approvals, pay vendors — all in one platform. No more email chains, no more spreadsheets.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+                <a routerLink="/signup" class="px-8 py-3.5 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-800 transition-colors shadow-lg shadow-brand-600/30">Get started free</a>
+                <a routerLink="/signup" class="px-8 py-3.5 bg-white border border-brand-100 text-brand-800 font-medium rounded-lg hover:bg-brand-100 transition-colors shadow-sm">See how it works</a>
+            </div>
+        </div>
+
+        <!-- Hero Product Image -->
+        <div class="relative mx-auto w-full max-w-5xl">
+            <!-- Decorative background glow (optional, adds depth) -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-brand-400 to-brand-600 rounded-xl blur opacity-30"></div>
+            
+            <!-- The actual image -->
+            <img 
+                src="assets/images/dashboard.png" 
+                alt="Hoodle Dashboard Interface" 
+                class="relative rounded-xl border border-gray-200 shadow-2xl object-cover"
+            >
+        </div>
+    </section>
+
     <section id="features" class="max-w-7xl mx-auto px-4 mb-24 scroll-mt-24">
         <h2 class="text-3xl font-bold text-center mb-12 text-brand-900">Everything your procurement team needs</h2>
 
@@ -105,6 +140,63 @@
                 <p class="text-gray-600 text-sm leading-relaxed">Process invoices, match POs automatically, and track payment status in real time.</p>
             </div>
 
+        </div>
+    </section>
+
+    <section id="docs" class="text-center px-4 pt-20 pb-12 max-w-4xl mx-auto scroll-mt-24">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-800 text-sm font-medium mb-8">
+            <span class="w-2 h-2 rounded-full bg-brand-600"></span> Built for modern enterprises
+        </div>
+
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-brand-900 leading-tight">
+            Procurement that moves as <br class="hidden md:block"> fast as your team
+        </h1>
+
+        <p class="text-xl text-brand-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Raise requests, get approvals, pay vendors — all in one platform. No more email chains, no more spreadsheets.
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+            <a routerLink="/signup" class="px-8 py-3.5 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-800 transition-colors shadow-lg shadow-brand-600/30">Get started free</a>
+            <a routerLink="/signup" class="px-8 py-3.5 bg-white border border-brand-100 text-brand-800 font-medium rounded-lg hover:bg-brand-100 transition-colors shadow-sm">Book a demo</a>
+        </div>
+    </section>
+
+    <!-- NEW: Interactive Product Showcase -->
+    <section class="max-w-6xl mx-auto px-4 mb-32 relative">
+        
+        <!-- Interactive Tabs -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            @for (feature of features; track feature.id) {
+                <button 
+                    type="button"
+                    (click)="activeTab.set(feature.id)"
+                    class="text-left p-4 rounded-xl border transition-all duration-300"
+                    [class]="activeTab() === feature.id ? 'bg-white border-brand-400 shadow-md ring-1 ring-brand-400' : 'bg-transparent border-brand-100 hover:bg-white hover:border-brand-200 opacity-70 hover:opacity-100'"
+                >
+                    <h3 class="font-bold text-brand-900 mb-1" [class.text-brand-600]="activeTab() === feature.id">
+                        {{ feature.title }}
+                    </h3>
+                    <p class="text-xs text-brand-600 hidden md:block">{{ feature.desc }}</p>
+                </button>
+            }
+        </div>
+
+        <!-- Dynamic Active Image Display -->
+        <div class="relative mx-auto w-full max-w-5xl transition-all duration-500 ease-in-out">
+            <!-- Background Glow -->
+            <div class="absolute -inset-2 bg-gradient-to-r from-brand-300 to-brand-600 rounded-2xl blur-xl opacity-20"></div>
+            
+            <!-- Loop through features and only show the active one (Prevents flickering from re-downloading images) -->
+            @for (feature of features; track feature.id) {
+                <img 
+                    [src]="feature.image" 
+                    [alt]="feature.title" 
+                    class="relative rounded-xl border border-gray-200 shadow-2xl object-cover w-full transition-opacity duration-500"
+                    [class.block]="activeTab() === feature.id"
+                    [class.hidden]="activeTab() !== feature.id"
+                >
+            }
         </div>
     </section>
 
