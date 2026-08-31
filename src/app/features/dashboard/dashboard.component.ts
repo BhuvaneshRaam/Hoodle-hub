@@ -1,37 +1,59 @@
-import { Component } from '@angular/core';
-import { DataTableComponent, TableColumn } from '../../shared/ui/data-table/data-table.component';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
-import { SideDrawerComponent } from '../../shared/ui/side-drawer/side-drawer.component';
+import { DataTableComponent, TableColumn } from '../../shared/ui/data-table/data-table.component';
+import { DashboardService } from './services/dashboard.service';
+import { AuthService } from '../../core/services/auth.service';
+import { DashboardSummaryModel } from './models/dashboard-summary.model';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule ,DataTableComponent, CurrencyPipe, ButtonComponent, SideDrawerComponent],
+  standalone: true,
+  imports: [CommonModule, DataTableComponent, CurrencyPipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  private readonly dashboardService = inject(DashboardService);
+  public readonly auth = inject(AuthService);
 
-  isRequestDrawerOpen: boolean = false;
-  totalSpend: number = 2450000;
-  pendingRequests: number = 12;
-  activeVendors: number = 48;
+  // Signals for state management
+  isLoading = signal<boolean>(true);
+  summaryData = signal<DashboardSummaryModel | null>(null);
 
-  // 2. Table Column Configuration (Strictly Typed!)
-  tableColumns: TableColumn[] = [
-    { key: 'id', header: 'Request ID', type: 'text' },
+  // Column definitions for PRQ tables
+  prqColumns: TableColumn[] = [
+    { key: 'prNumber', header: 'Request ID', type: 'text' },
     { key: 'department', header: 'Department', type: 'text' },
-    { key: 'amount', header: 'Amount', type: 'currency' },
-    { key: 'status', header: 'Status', type: 'badge' },
-    { key: 'action', header: 'Action', type: 'action' }
+    { key: 'totalAmount', header: 'Est. Amount', type: 'currency' },
+    { key: 'createdAt', header: 'Created On', type: 'date' },
+    { key: 'status', header: 'Status', type: 'badge' }
   ];
 
-  // 3. Dummy Data Array
-  recentRequests = [
-    { id: 'REQ-2026-001', department: 'Engineering', amount: 125000, status: 'Pending' },
-    { id: 'REQ-2026-002', department: 'Marketing', amount: 45000, status: 'Approved' },
-    { id: 'REQ-2026-003', department: 'Operations', amount: 89000, status: 'In Transit' },
-    { id: 'REQ-2026-004', department: 'HR', amount: 12000, status: 'Rejected' },
-    { id: 'REQ-2026-005', department: 'IT', amount: 340000, status: 'Delivered' }
+  // Column definitions for PO table
+  poColumns: TableColumn[] = [
+    { key: 'poNumber', header: 'PO Number', type: 'text' },
+    { key: 'vendorName', header: 'Vendor Name', type: 'text' },
+    { key: 'totalAmount', header: 'Total Amount', type: 'currency' },
+    { key: 'createdAt', header: 'Date', type: 'date' },
+    { key: 'status', header: 'Status', type: 'badge' }
   ];
+
+  ngOnInit(): void {
+    this.fetchDashboardSummary();
+  }
+
+  fetchDashboardSummary(): void {
+    this.isLoading.set(true);
+    this.dashboardService.getSummary().subscribe({
+      next: (data) => {
+        this.summaryData.set(data);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load dashboard summary', err);
+        this.isLoading.set(false);
+      }
+    });
+  }
 }
+

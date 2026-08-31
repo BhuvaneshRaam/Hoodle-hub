@@ -62,12 +62,12 @@ export class AuthService {
     this.http.post<any>(this.AUTH_ROOT_PATH + '/logout', {}).subscribe({
       next: () => {
         this.currentUser.set(null);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/signin']);
       },
       error: (err) => {
         console.error('Logout request failed, forcing local logout', err);
         this.currentUser.set(null);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/signin']);
       }
     });
   }
@@ -106,8 +106,8 @@ export class AuthService {
 
         // Prevent redirect loops if they are already on a public page
         const currentUrl = this.router.url;
-        if (!currentUrl.includes('/login') && !currentUrl.includes('/signup')) {
-          this.router.navigate(['/login']);
+        if (currentUrl !== '/' && !currentUrl.includes('/signin') && !currentUrl.includes('/signup')) {
+          this.router.navigate(['/signin']);
         }
 
         return of(null);

@@ -11,9 +11,10 @@ import { permissionGuard } from './core/guards/permission.guard';
             path: '',
             component: PublicLayoutComponent,
             children: [
-                { path: '', redirectTo: '', pathMatch: 'full' },
                 {
-                    path: '', 
+                    path: '',
+                    pathMatch: 'full',
+                    canActivate: [noAuthGuard],
                     loadComponent: () => import('./features/public/landing/landing.component').then(c => c.LandingComponent)
                 },
                 {

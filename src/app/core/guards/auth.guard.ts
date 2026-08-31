@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true; // Let them in
   } else {
     // No token? Kick them to the login page
-    router.navigate(['/login']);
+    router.navigate(['/signin']);
     return false;
   }
 };
