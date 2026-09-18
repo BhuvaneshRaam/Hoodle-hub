@@ -1,57 +1,76 @@
 <div class="animate-fade-in min-h-screen bg-brand-50 font-sans text-brand-900">
 
-    <header class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded bg-brand-600 flex items-center justify-center text-white font-bold"><svg
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"
+    <!-- Header Navigation -->
+    <header class="flex justify-between items-center px-6 md:px-8 py-6 max-w-7xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded bg-brand-600 flex items-center justify-center text-white font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"
                     class="w-full h-full drop-shadow-md transition-transform hover:scale-105">
                     <rect x="35" y="25" width="36" height="150" rx="18" fill="var(--color-brand-400, #7F77DD)" />
                     <rect x="129" y="25" width="36" height="150" rx="18" fill="var(--color-brand-100, #CECBF6)" />
                     <rect x="50" y="82" width="100" height="36" rx="18" fill="var(--color-brand-400, #7F77DD)"
                         transform="rotate(-10, 100, 100)" />
-                </svg></div>
+                </svg>
+            </div>
             <span class="text-xl font-bold text-brand-900 tracking-tight">Hoodle</span>
         </div>
 
         <nav class="hidden md:flex gap-8 text-sm font-medium text-brand-600">
+            <a href="#product" class="hover:text-brand-800 transition-colors">Product</a>
             <a href="#features" class="hover:text-brand-800 transition-colors">Features</a>
             <a href="#pricing" class="hover:text-brand-800 transition-colors">Pricing</a>
-            <a href="#docs" class="hover:text-brand-800 transition-colors">Docs</a>
         </nav>
 
         <div class="flex items-center gap-4">
-            <a routerLink="/signin" class="text-sm font-medium text-brand-600 hover:text-brand-800">Sign In</a>
+            <a routerLink="/signin" class="text-sm font-medium text-brand-600 hover:text-brand-800 transition-colors">
+                Sign In
+            </a>
             <a routerLink="/signup"
-                class="px-5 py-2.5 text-sm font-medium bg-white text-brand-900 border border-brand-100 rounded-lg hover:border-brand-400 transition-colors shadow-sm">Book
-                a demo</a>
+                class="px-5 py-2.5 text-sm font-medium bg-white text-brand-900 border border-brand-100 rounded-lg hover:border-brand-400 transition-colors shadow-sm">
+                Book a demo
+            </a>
         </div>
     </header>
 
-    <section id="docs" class="text-center px-4 pt-20 pb-16 max-w-4xl mx-auto scroll-mt-24">
-        <div
-            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-800 text-sm font-medium mb-8">
-            <span class="w-2 h-2 rounded-full bg-brand-600"></span> Built for modern enterprises
+    <!-- Single Hero Section -->
+    <section class="text-center px-4 pt-16 pb-16 max-w-6xl mx-auto">
+        <div class="max-w-4xl mx-auto">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-800 text-sm font-medium mb-8">
+                <span class="w-2 h-2 rounded-full bg-brand-600"></span> Built for modern enterprises
+            </div>
+
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-brand-900 leading-tight">
+                Procurement that moves as <br class="hidden md:block"> fast as your team
+            </h1>
+
+            <p class="text-xl text-brand-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Raise requests, get approvals, pay vendors — all in one platform. No more email chains, no more
+                spreadsheets.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+                <a routerLink="/signup"
+                    class="px-8 py-3.5 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-800 transition-colors shadow-lg shadow-brand-600/30">
+                    Get started free
+                </a>
+                <a href="#product"
+                    class="px-8 py-3.5 bg-white border border-brand-100 text-brand-800 font-medium rounded-lg hover:bg-brand-100 transition-colors shadow-sm">
+                    See how it works
+                </a>
+            </div>
         </div>
 
-        <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-brand-900 leading-tight">
-            Procurement that moves as <br class="hidden md:block"> fast as your team
-        </h1>
-
-        <p class="text-xl text-brand-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Raise requests, get approvals, pay vendors — all in one platform. No more email chains, no more
-            spreadsheets.
-        </p>
-
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a routerLink="/signup"
-                class="px-8 py-3.5 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-800 transition-colors shadow-lg shadow-brand-600/30">Get
-                started free</a>
-            <a routerLink="/signup"
-                class="px-8 py-3.5 bg-white border border-brand-100 text-brand-800 font-medium rounded-lg hover:bg-brand-100 transition-colors shadow-sm">See
-                how it works</a>
+        <!-- Hero Product Image -->
+        <div class="relative mx-auto w-full max-w-5xl">
+            <div class="absolute -inset-1 bg-gradient-to-r from-brand-400 to-brand-600 rounded-2xl blur-lg opacity-25">
+            </div>
+            <img src="assets/images/dashboard.png" alt="Hoodle Dashboard Interface"
+                class="relative rounded-2xl border border-brand-100 shadow-2xl object-cover w-full bg-white">
         </div>
     </section>
 
+    <!-- Stats Bar -->
     <section class="max-w-7xl mx-auto px-4 mb-24">
         <div
             class="grid grid-cols-1 md:grid-cols-3 bg-gradient-to-r from-white via-brand-50/50 to-white text-brand-900 rounded-xl overflow-hidden divide-y md:divide-y-0 md:divide-x divide-brand-100 border border-brand-100 shadow-lg">
@@ -70,136 +89,98 @@
         </div>
     </section>
 
-    <section id="docs" class="text-center px-4 pt-20 pb-16 max-w-6xl mx-auto scroll-mt-24">
-        <!-- Text Content -->
-        <div class="max-w-4xl mx-auto">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-800 text-sm font-medium mb-8">
-                <span class="w-2 h-2 rounded-full bg-brand-600"></span> Built for modern enterprises
-            </div>
-
-            <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-brand-900 leading-tight">
-                Procurement that moves as <br class="hidden md:block"> fast as your team
-            </h1>
-
-            <p class="text-xl text-brand-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Raise requests, get approvals, pay vendors — all in one platform. No more email chains, no more spreadsheets.
+    <!-- Interactive Product Showcase -->
+    <section id="product" class="max-w-6xl mx-auto px-4 mb-28 scroll-mt-24">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-brand-900 mb-3">
+                Explore the platform
+            </h2>
+            <p class="text-brand-600 text-lg">
+                Everything you need to streamline requests, purchase orders, suppliers, and user permissions.
             </p>
-
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-                <a routerLink="/signup" class="px-8 py-3.5 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-800 transition-colors shadow-lg shadow-brand-600/30">Get started free</a>
-                <a routerLink="/signup" class="px-8 py-3.5 bg-white border border-brand-100 text-brand-800 font-medium rounded-lg hover:bg-brand-100 transition-colors shadow-sm">See how it works</a>
-            </div>
         </div>
 
-        <!-- Hero Product Image -->
-        <div class="relative mx-auto w-full max-w-5xl">
-            <!-- Decorative background glow (optional, adds depth) -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-brand-400 to-brand-600 rounded-xl blur opacity-30"></div>
-            
-            <!-- The actual image -->
-            <img 
-                src="assets/images/dashboard.png" 
-                alt="Hoodle Dashboard Interface" 
-                class="relative rounded-xl border border-gray-200 shadow-2xl object-cover"
-            >
+        <!-- Interactive Tabs -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            @for (feature of features; track feature.id) {
+            <button type="button" (click)="activeTab.set(feature.id)"
+                class="text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer"
+                [class]="activeTab() === feature.id 
+                        ? 'bg-white border-brand-400 shadow-md ring-1 ring-brand-400' 
+                        : 'bg-white/60 border-brand-100 hover:bg-white hover:border-brand-200 opacity-80 hover:opacity-100'">
+                <h3 class="font-bold text-brand-900 mb-1" [class.text-brand-600]="activeTab() === feature.id">
+                    {{ feature.title }}
+                </h3>
+                <p class="text-xs text-brand-600 hidden md:block">{{ feature.desc }}</p>
+            </button>
+            }
+        </div>
+
+        <!-- Dynamic Active Image Display -->
+        <div class="relative mx-auto w-full max-w-5xl transition-all duration-300">
+            <div class="absolute -inset-1 bg-gradient-to-r from-brand-300 to-brand-600 rounded-2xl blur-lg opacity-20">
+            </div>
+
+            @for (feature of features; track feature.id) {
+            <img [src]="feature.image" [alt]="feature.title"
+                class="relative rounded-2xl border border-brand-100 shadow-2xl object-cover w-full bg-white transition-opacity duration-300"
+                [class.block]="activeTab() === feature.id" [class.hidden]="activeTab() !== feature.id">
+            }
         </div>
     </section>
 
-    <section id="features" class="max-w-7xl mx-auto px-4 mb-24 scroll-mt-24">
+    <!-- Core Features Grid -->
+    <section id="features" class="max-w-7xl mx-auto px-4 mb-28 scroll-mt-24">
         <h2 class="text-3xl font-bold text-center mb-12 text-brand-900">Everything your procurement team needs</h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-            <div class="bg-gradient-to-br from-white to-brand-50 p-8 rounded-2xl border border-brand-100 shadow-md hover:shadow-xl hover:border-brand-300 hover:to-brand-100 hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
-                <div class="w-14 h-14 bg-white shadow-sm text-brand-600 flex items-center justify-center rounded-xl mb-6 text-2xl group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300 border border-brand-50">
+            <div
+                class="bg-gradient-to-br from-white to-brand-50 p-8 rounded-2xl border border-brand-100 shadow-md hover:shadow-xl hover:border-brand-300 hover:to-brand-100 hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+                <div
+                    class="w-14 h-14 bg-white shadow-sm text-brand-600 flex items-center justify-center rounded-xl mb-6 text-2xl group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300 border border-brand-50">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold mb-3 text-brand-900">Approval workflows</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">Multi-level routing based on department, budget, and role. Auto-escalate bottlenecks instantly.</p>
+                <p class="text-brand-600 text-sm leading-relaxed">Multi-level routing based on department, budget, and
+                    role. Auto-escalate bottlenecks instantly.</p>
             </div>
 
-            <div class="bg-gradient-to-br from-white to-brand-50 p-8 rounded-2xl border border-brand-100 shadow-md hover:shadow-xl hover:border-brand-300 hover:to-brand-100 hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
-                <div class="w-14 h-14 bg-white shadow-sm text-brand-600 flex items-center justify-center rounded-xl mb-6 text-2xl group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300 border border-brand-50">
+            <div
+                class="bg-gradient-to-br from-white to-brand-50 p-8 rounded-2xl border border-brand-100 shadow-md hover:shadow-xl hover:border-brand-300 hover:to-brand-100 hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+                <div
+                    class="w-14 h-14 bg-white shadow-sm text-brand-600 flex items-center justify-center rounded-xl mb-6 text-2xl group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300 border border-brand-50">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-brand-900">Inventory tracking</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">Auto-raise requests when stock hits threshold. Never run out of critical enterprise assets.</p>
+                <h3 class="text-xl font-bold mb-3 text-brand-900">Automated POs</h3>
+                <p class="text-brand-600 text-sm leading-relaxed">Convert approved requisitions into official purchase
+                    orders automatically with real-time audit logs.</p>
             </div>
 
-            <div class="bg-gradient-to-br from-white to-brand-50 p-8 rounded-2xl border border-brand-100 shadow-md hover:shadow-xl hover:border-brand-300 hover:to-brand-100 hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
-                <div class="w-14 h-14 bg-white shadow-sm text-brand-600 flex items-center justify-center rounded-xl mb-6 text-2xl group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300 border border-brand-50">
+            <div
+                class="bg-gradient-to-br from-white to-brand-50 p-8 rounded-2xl border border-brand-100 shadow-md hover:shadow-xl hover:border-brand-300 hover:to-brand-100 hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
+                <div
+                    class="w-14 h-14 bg-white shadow-sm text-brand-600 flex items-center justify-center rounded-xl mb-6 text-2xl group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300 border border-brand-50">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                        </path>
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold mb-3 text-brand-900">Vendor payments</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">Process invoices, match POs automatically, and track payment status in real time.</p>
+                <p class="text-brand-600 text-sm leading-relaxed">Process invoices, match POs automatically, and track
+                    payment status in real time.</p>
             </div>
 
         </div>
     </section>
 
-    <section id="docs" class="text-center px-4 pt-20 pb-12 max-w-4xl mx-auto scroll-mt-24">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-800 text-sm font-medium mb-8">
-            <span class="w-2 h-2 rounded-full bg-brand-600"></span> Built for modern enterprises
-        </div>
-
-        <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-brand-900 leading-tight">
-            Procurement that moves as <br class="hidden md:block"> fast as your team
-        </h1>
-
-        <p class="text-xl text-brand-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Raise requests, get approvals, pay vendors — all in one platform. No more email chains, no more spreadsheets.
-        </p>
-
-        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-            <a routerLink="/signup" class="px-8 py-3.5 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-800 transition-colors shadow-lg shadow-brand-600/30">Get started free</a>
-            <a routerLink="/signup" class="px-8 py-3.5 bg-white border border-brand-100 text-brand-800 font-medium rounded-lg hover:bg-brand-100 transition-colors shadow-sm">Book a demo</a>
-        </div>
-    </section>
-
-    <!-- NEW: Interactive Product Showcase -->
-    <section class="max-w-6xl mx-auto px-4 mb-32 relative">
-        
-        <!-- Interactive Tabs -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            @for (feature of features; track feature.id) {
-                <button 
-                    type="button"
-                    (click)="activeTab.set(feature.id)"
-                    class="text-left p-4 rounded-xl border transition-all duration-300"
-                    [class]="activeTab() === feature.id ? 'bg-white border-brand-400 shadow-md ring-1 ring-brand-400' : 'bg-transparent border-brand-100 hover:bg-white hover:border-brand-200 opacity-70 hover:opacity-100'"
-                >
-                    <h3 class="font-bold text-brand-900 mb-1" [class.text-brand-600]="activeTab() === feature.id">
-                        {{ feature.title }}
-                    </h3>
-                    <p class="text-xs text-brand-600 hidden md:block">{{ feature.desc }}</p>
-                </button>
-            }
-        </div>
-
-        <!-- Dynamic Active Image Display -->
-        <div class="relative mx-auto w-full max-w-5xl transition-all duration-500 ease-in-out">
-            <!-- Background Glow -->
-            <div class="absolute -inset-2 bg-gradient-to-r from-brand-300 to-brand-600 rounded-2xl blur-xl opacity-20"></div>
-            
-            <!-- Loop through features and only show the active one (Prevents flickering from re-downloading images) -->
-            @for (feature of features; track feature.id) {
-                <img 
-                    [src]="feature.image" 
-                    [alt]="feature.title" 
-                    class="relative rounded-xl border border-gray-200 shadow-2xl object-cover w-full transition-opacity duration-500"
-                    [class.block]="activeTab() === feature.id"
-                    [class.hidden]="activeTab() !== feature.id"
-                >
-            }
-        </div>
-    </section>
-
+    <!-- Bottom CTA Banner -->
     <section id="pricing" class="max-w-5xl mx-auto px-4 mb-24 scroll-mt-24">
         <div class="bg-brand-900 rounded-2xl p-12 text-center relative overflow-hidden shadow-2xl">
             <div
@@ -210,21 +191,24 @@
             </div>
 
             <div class="relative z-10">
-                <h2 class="text-3xl font-bold text-white mb-4">Ready to fix your procurement mess?</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to fix your procurement mess?</h2>
                 <p class="text-brand-100 mb-8 max-w-xl mx-auto">Get your team onboarded in under 30 minutes. No credit
                     card needed.</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <a routerLink="/signup"
-                        class="px-6 py-3 bg-white text-brand-900 font-semibold rounded-lg hover:bg-brand-50 transition-colors shadow-md">Start
-                        for free</a>
+                        class="px-6 py-3 bg-white text-brand-900 font-semibold rounded-lg hover:bg-brand-50 transition-colors shadow-md">
+                        Start for free
+                    </a>
                     <a routerLink="/signup"
-                        class="px-6 py-3 border border-brand-400 text-white font-semibold rounded-lg hover:bg-brand-800 transition-colors">Book
-                        a demo</a>
+                        class="px-6 py-3 border border-brand-400 text-white font-semibold rounded-lg hover:bg-brand-800 transition-colors">
+                        Book a demo
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="text-center py-8 text-brand-600 text-sm border-t border-brand-100">
         <p>© {{ currentYear }} Hoodle · Enterprise Edition</p>
     </footer>
